@@ -13,7 +13,7 @@ RSpec.describe GreenLog::SimpleWriter do
   end
 
   def log(**args)
-    entry = GreenLog::Entry.new(**args)
+    entry = GreenLog::Entry.with(**args)
     writer.call(entry)
   end
 

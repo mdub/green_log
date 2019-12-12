@@ -4,12 +4,12 @@ require "green_log/entry"
 
 RSpec.describe GreenLog::Entry do
 
-  describe ".new" do
+  describe ".with" do
 
     context "by default" do
 
       subject(:entry) do
-        GreenLog::Entry.new
+        GreenLog::Entry.with({})
       end
 
       describe "#message" do
@@ -35,7 +35,7 @@ RSpec.describe GreenLog::Entry do
     context "with a :message" do
 
       subject(:entry) do
-        GreenLog::Entry.new(message: "hello")
+        GreenLog::Entry.with(message: "hello")
       end
 
       describe "#message" do
@@ -49,7 +49,7 @@ RSpec.describe GreenLog::Entry do
     context "with a :severity" do
 
       subject(:entry) do
-        GreenLog::Entry.new(severity: :debug)
+        GreenLog::Entry.with(severity: :debug)
       end
 
       describe "#severity" do
@@ -67,7 +67,7 @@ RSpec.describe GreenLog::Entry do
       end
 
       subject(:entry) do
-        GreenLog::Entry.new(context: :debug)
+        GreenLog::Entry.with(context: :debug)
       end
 
       describe "#context" do
@@ -76,6 +76,44 @@ RSpec.describe GreenLog::Entry do
         end
       end
 
+    end
+
+  end
+
+  describe "#with_context" do
+
+    let(:original_context) do
+      {
+        colour: "red",
+        flavour: "strawberry"
+      }
+    end
+
+    subject(:original_entry) do
+      GreenLog::Entry.with(context: original_context)
+    end
+
+    let(:extra_context) do
+      {
+        flavour: "watermelon",
+        direction: "north"
+      }
+    end
+
+    let!(:result) do
+      original_entry.with_context(extra_context)
+    end
+
+    it "adds the new context" do
+      expect(result.context).to include(direction: "north")
+    end
+
+    it "overrides values as required" do
+      expect(result.context).to include(colour: "red")
+    end
+
+    it "retains other context" do
+      expect(result.context).to include(colour: "red")
     end
 
   end
