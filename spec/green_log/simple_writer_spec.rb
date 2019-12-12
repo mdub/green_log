@@ -58,6 +58,27 @@ RSpec.describe GreenLog::SimpleWriter do
 
     end
 
+    context "with a :context" do
+
+      let(:context) do
+        {
+          colour: "yellow",
+          flavour: "banana",
+        }
+      end
+
+      before do
+        log(message: "Hello", context: context)
+      end
+
+      it "outputs severity and message" do
+        expect(output).to eq(<<~EOT)
+          I [colour="yellow" flavour="banana"] -- Hello
+        EOT
+      end
+
+    end
+
   end
 
 end
