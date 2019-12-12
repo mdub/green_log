@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "green_log/version"
 
 module GreenLog
