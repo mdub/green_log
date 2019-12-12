@@ -63,7 +63,7 @@ RSpec.describe GreenLog::Entry do
     context "with a :context" do
 
       let(:test_context) do
-         { colour: "red" }.freeze
+        { colour: "red" }.freeze
       end
 
       subject(:entry) do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'values'
+require "values"
 
 module GreenLog
 

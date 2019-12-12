@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require "green_log/entry"
 require "green_log/simple_writer"
@@ -25,9 +26,9 @@ RSpec.describe GreenLog::SimpleWriter do
       end
 
       it "outputs only severity" do
-        expect(output).to eq(<<~EOT)
+        expect(output).to eq(<<~OUT)
           I --
-        EOT
+        OUT
       end
 
     end
@@ -39,9 +40,9 @@ RSpec.describe GreenLog::SimpleWriter do
       end
 
       it "outputs severity and message" do
-        expect(output).to eq(<<~EOT)
+        expect(output).to eq(<<~OUT)
           I -- Hello there
-        EOT
+        OUT
       end
 
     end
@@ -63,7 +64,7 @@ RSpec.describe GreenLog::SimpleWriter do
       let(:context) do
         {
           colour: "yellow",
-          flavour: "banana",
+          flavour: "banana"
         }
       end
 
@@ -72,9 +73,9 @@ RSpec.describe GreenLog::SimpleWriter do
       end
 
       it "outputs severity and message" do
-        expect(output).to eq(<<~EOT)
+        expect(output).to eq(<<~OUT)
           I [colour="yellow" flavour="banana"] -- Hello
-        EOT
+        OUT
       end
 
     end
