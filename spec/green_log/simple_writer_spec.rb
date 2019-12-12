@@ -18,16 +18,42 @@ RSpec.describe GreenLog::SimpleWriter do
 
   describe "#call" do
 
+    context "with a default entry" do
+
+      before do
+        log
+      end
+
+      it "outputs only severity" do
+        expect(output).to eq(<<~EOT)
+          I --
+        EOT
+      end
+
+    end
+
     context "with a :message" do
 
       before do
-        log(message: "Hello there")
+        log(severity: :info, message: "Hello there")
       end
 
-      it "outputs the message" do
+      it "outputs severity and message" do
         expect(output).to eq(<<~EOT)
-          "Hello there"
+          I -- Hello there
         EOT
+      end
+
+    end
+
+    context "with a :severity" do
+
+      before do
+        log(severity: :warn)
+      end
+
+      it "outputs first character of severity" do
+        expect(output).to start_with("W ")
       end
 
     end

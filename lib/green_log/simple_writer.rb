@@ -7,7 +7,11 @@ module GreenLog
     end
 
     def call(entry)
-      @io << entry.message.to_str.inspect + "\n"
+      @io << [
+        entry.severity.to_s[0].upcase,
+        "--",
+        (entry.message.to_str if entry.message),
+      ].compact.join(" ") + "\n"
     end
 
   end
