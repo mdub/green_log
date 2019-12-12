@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
+require 'values'
+
 module GreenLog
 
   # Represents a structured log entry.
-  class Entry
+  class Entry < Value.new(:message, :severity, :context)
 
     def initialize(message: nil, severity: :info, context: {})
-      @message = message
-      @severity = severity
-      @context = context
+      super(message, severity, context)
     end
-
-    attr_reader :message
-    attr_reader :severity
-    attr_reader :context
 
   end
 

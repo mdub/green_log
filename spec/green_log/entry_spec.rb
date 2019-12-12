@@ -4,10 +4,6 @@ require "green_log/entry"
 
 RSpec.describe GreenLog::Entry do
 
-  def new_entry(**args)
-    described_class.new(**args)
-  end
-
   describe ".new" do
 
     context "by default" do
@@ -30,7 +26,7 @@ RSpec.describe GreenLog::Entry do
 
       describe "#context" do
         it "defaults to empty" do
-          expect(new_entry.context.to_h).to eq({})
+          expect(entry.context.to_h).to eq({})
         end
       end
 
