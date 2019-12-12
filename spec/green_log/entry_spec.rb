@@ -19,6 +19,10 @@ RSpec.describe GreenLog::Entry do
       expect(e.message).to eq("foo")
     end
 
+    it "is immutable" do
+      expect(new_entry).not_to respond_to(:message=)
+    end
+
   end
 
   describe "#severity" do
@@ -30,6 +34,28 @@ RSpec.describe GreenLog::Entry do
     it "can be overridden" do
       e = new_entry(severity: :debug)
       expect(e.severity).to eq(:debug)
+    end
+
+    it "is immutable" do
+      expect(new_entry).not_to respond_to(:severity=)
+    end
+
+  end
+
+  describe "#context" do
+
+    it "defaults to empty" do
+      expect(new_entry.context).to eq({})
+    end
+
+    it "can be overridden" do
+      test_context = { colour: "red" }.freeze
+      e = new_entry(context: test_context)
+      expect(e.context).to eq(test_context)
+    end
+
+    it "is immutable" do
+      expect(new_entry).not_to respond_to(:context=)
     end
 
   end
