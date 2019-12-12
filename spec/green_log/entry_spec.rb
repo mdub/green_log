@@ -8,54 +8,78 @@ RSpec.describe GreenLog::Entry do
     described_class.new(**args)
   end
 
-  describe "#message" do
+  describe ".new" do
 
-    it "defaults to nil" do
-      expect(new_entry.message).to be_nil
+    context "by default" do
+
+      subject(:entry) do
+        GreenLog::Entry.new
+      end
+
+      describe "#message" do
+        it "defaults nil" do
+          expect(entry.message).to be_nil
+        end
+      end
+
+      describe "#severity" do
+        it "defaults to :info" do
+          expect(entry.severity.to_sym).to eq(:info)
+        end
+      end
+
+      describe "#context" do
+        it "defaults to empty" do
+          expect(new_entry.context.to_h).to eq({})
+        end
+      end
+
     end
 
-    it "can be specified" do
-      e = new_entry(message: "foo")
-      expect(e.message).to eq("foo")
+    context "with a :message" do
+
+      subject(:entry) do
+        GreenLog::Entry.new(message: "hello")
+      end
+
+      describe "#message" do
+        it "is set" do
+          expect(entry.message).to eq("hello")
+        end
+      end
+
     end
 
-    it "is immutable" do
-      expect(new_entry).not_to respond_to(:message=)
+    context "with a :severity" do
+
+      subject(:entry) do
+        GreenLog::Entry.new(severity: :debug)
+      end
+
+      describe "#severity" do
+        it "is set" do
+          expect(entry.severity).to eq(:debug)
+        end
+      end
+
     end
 
-  end
+    context "with a :context" do
 
-  describe "#severity" do
+      let(:test_context) do
+         { colour: "red" }.freeze
+      end
 
-    it "defaults to :info" do
-      expect(new_entry.severity).to eq(:info)
-    end
+      subject(:entry) do
+        GreenLog::Entry.new(context: :debug)
+      end
 
-    it "can be overridden" do
-      e = new_entry(severity: :debug)
-      expect(e.severity).to eq(:debug)
-    end
+      describe "#context" do
+        it "is set" do
+          expect(entry.context).to eq(:debug)
+        end
+      end
 
-    it "is immutable" do
-      expect(new_entry).not_to respond_to(:severity=)
-    end
-
-  end
-
-  describe "#context" do
-
-    it "defaults to empty" do
-      expect(new_entry.context).to eq({})
-    end
-
-    it "can be overridden" do
-      test_context = { colour: "red" }.freeze
-      e = new_entry(context: test_context)
-      expect(e.context).to eq(test_context)
-    end
-
-    it "is immutable" do
-      expect(new_entry).not_to respond_to(:context=)
     end
 
   end
