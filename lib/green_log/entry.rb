@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "green_log/severity"
 require "values"
 
 module GreenLog
@@ -10,7 +11,7 @@ module GreenLog
     def self.with(message: nil, severity: nil, context: nil)
       super(
         message: message,
-        severity: (severity || :info),
+        severity: Severity.resolve(severity || Severity::INFO),
         context: (context || {})
       )
     end

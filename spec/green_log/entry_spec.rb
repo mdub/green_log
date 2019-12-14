@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/entry"
+require "green_log/severity"
 
 RSpec.describe GreenLog::Entry do
 
@@ -19,8 +20,8 @@ RSpec.describe GreenLog::Entry do
       end
 
       describe "#severity" do
-        it "defaults to :info" do
-          expect(entry.severity.to_sym).to eq(:info)
+        it "defaults to INFO" do
+          expect(entry.severity).to eq(GreenLog::Severity::INFO)
         end
       end
 
@@ -49,12 +50,12 @@ RSpec.describe GreenLog::Entry do
     context "with a :severity" do
 
       subject(:entry) do
-        GreenLog::Entry.with(severity: :debug)
+        GreenLog::Entry.with(severity: "debug")
       end
 
       describe "#severity" do
         it "is set" do
-          expect(entry.severity).to eq(:debug)
+          expect(entry.severity).to eq(GreenLog::Severity::DEBUG)
         end
       end
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/logger"
+require "green_log/severity"
 
 RSpec.describe GreenLog::Logger do
 
@@ -22,8 +23,8 @@ RSpec.describe GreenLog::Logger do
         expect(last_entry.message).to eq("Hello")
       end
 
-      it "logs at severity :info" do
-        expect(last_entry.severity).to eq(:info)
+      it "logs at severity INFO" do
+        expect(last_entry.severity).to eq(GreenLog::Severity::INFO)
       end
 
     end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/entry"
+require "green_log/severity"
 require "green_log/simple_writer"
 
 RSpec.describe GreenLog::SimpleWriter do
@@ -49,7 +50,7 @@ RSpec.describe GreenLog::SimpleWriter do
     end
 
     context "with a :severity" do
-      log(severity: :warn)
+      log(severity: "WARN")
       outputs "first character of severity", /^W /
     end
 

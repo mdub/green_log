@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "green_log/severity"
+
 module GreenLog
 
   # A simple log formatter, aimed at humans.
@@ -28,7 +30,7 @@ module GreenLog
     end
 
     def format_severity(severity)
-      severity.to_s[0].upcase
+      Severity.name(severity)[0].upcase
     end
 
     def format_context(context)
