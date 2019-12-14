@@ -17,66 +17,59 @@ RSpec.describe GreenLog::SimpleWriter do
     writer.call(entry)
   end
 
+  def self.log(**args)
+    before do
+      log(**args)
+    end
+  end
+
+  def self.logging(desc, **args, &block)
+    context(desc) do
+      log(**args)
+      class_eval(&block)
+    end
+  end
+
+  def self.outputs(desc, expectation)
+    it "outputs #{desc}" do
+      expect(output).to match(expectation)
+    end
+  end
+
   describe "#call" do
 
-    context "with a default entry" do
-
-      before do
-        log
-      end
-
-      it "outputs only severity" do
-        expect(output).to eq(<<~OUT)
-          I --
-        OUT
-      end
-
+    context "a default entry" do
+      log
+      outputs "only severity", "I --\n"
     end
 
     context "with a :message" do
-
-      before do
-        log(severity: :info, message: "Hello there")
-      end
-
-      it "outputs severity and message" do
-        expect(output).to eq(<<~OUT)
-          I -- Hello there
-        OUT
-      end
-
+      log(message: "Hello")
+      outputs "severity and message", "I -- Hello\n"
     end
 
     context "with a :severity" do
-
-      before do
-        log(severity: :warn)
-      end
-
-      it "outputs first character of severity" do
-        expect(output).to start_with("W ")
-      end
-
+      log(severity: :warn)
+      outputs "first character of severity", /^W /
     end
 
     context "with a :context" do
 
-      let(:context) do
-        {
-          colour: "yellow",
-          flavour: "banana"
-        }
-      end
+      log(context: { colour: "yellow", flavour: "banana" })
 
-      before do
-        log(message: "Hello", context: context)
-      end
+      outputs "the context", <<~OUT
+        I [colour="yellow" flavour="banana"] --
+      OUT
 
-      it "outputs severity and message" do
-        expect(output).to eq(<<~OUT)
-          I [colour="yellow" flavour="banana"] -- Hello
-        OUT
-      end
+    end
+
+    context "with all components" do
+
+      log(message: "Hello", context: { colour: "yellow", flavour: "banana" })
+
+      outputs "everything", <<~OUT
+        I [colour="yellow" flavour="banana"] -- Hello
+      OUT
 
     end
 
