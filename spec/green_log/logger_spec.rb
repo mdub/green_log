@@ -11,6 +11,24 @@ RSpec.describe GreenLog::Logger do
 
   subject(:logger) { described_class.new(log_sink) }
 
+  describe "#level" do
+
+    it "defaults to DEBUG" do
+      expect(logger.level).to eq(GreenLog::Severity::DEBUG)
+    end
+
+    it "can be set as a numeric value" do
+      logger.level = GreenLog::Severity::WARN
+      expect(logger.level).to eq(GreenLog::Severity::WARN)
+    end
+
+    it "can be set as a string" do
+      logger.level = "WARN"
+      expect(logger.level).to eq(GreenLog::Severity::WARN)
+    end
+
+  end
+
   describe "#info" do
 
     context "with a message" do

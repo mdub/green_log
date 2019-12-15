@@ -10,9 +10,15 @@ module GreenLog
 
     def initialize(downstream)
       @downstream = downstream
+      @level = Severity::DEBUG
     end
 
     attr_reader :downstream
+    attr_reader :level
+
+    def level=(severity)
+      @level = Severity.resolve(severity)
+    end
 
     def log(severity, message)
       severity = Severity.resolve(severity)
