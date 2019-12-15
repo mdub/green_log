@@ -90,6 +90,18 @@ RSpec.describe GreenLog::Logger do
 
     end
 
+    context "with a Hash argument, unpacked" do
+
+      before do
+        logger.log(logger.level, **data)
+      end
+
+      it "sets the data" do
+        expect(log.last.data).to eq(data)
+      end
+
+    end
+
     context "with an Exception argument" do
 
       before do
@@ -118,6 +130,22 @@ RSpec.describe GreenLog::Logger do
 
       it "sets the data" do
         expect(log.last.data).to eq(data)
+      end
+
+    end
+
+    context "with String and Exception arguments" do
+
+      before do
+        logger.log(logger.level, message, exception)
+      end
+
+      it "sets the message" do
+        expect(log.last.message).to eq(message)
+      end
+
+      it "sets the exception" do
+        expect(log.last.exception).to eq(exception)
       end
 
     end
