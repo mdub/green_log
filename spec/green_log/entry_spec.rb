@@ -133,6 +133,16 @@ RSpec.describe GreenLog::Entry do
 
     end
 
+    context "with multiple Strings" do
+
+      it "complains" do
+        expect do
+          GreenLog::Entry.build(GreenLog::Severity::INFO, "Hello", "there")
+        end.to raise_error(ArgumentError, "multiple message arguments specified")
+      end
+
+    end
+
   end
 
   describe "#with_context" do

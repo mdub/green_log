@@ -13,9 +13,7 @@ module GreenLog
     end
 
     def <<(entry)
-      unless entry.is_a?(GreenLog::Entry)
-        raise ArgumentError, "GreenLog::Entry expected"
-      end
+      raise ArgumentError, "GreenLog::Entry expected" unless entry.is_a?(GreenLog::Entry)
 
       @io << [
         format_part(entry, :severity),

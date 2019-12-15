@@ -24,7 +24,10 @@ module GreenLog
       def build(severity, *args)
         options = { severity: severity }
         args.each do |arg|
-          options[arg_type(arg)] = arg
+          type = arg_type(arg)
+          raise ArgumentError, "multiple #{type} arguments specified" if options.key?(type)
+
+          options[type] = arg
         end
         with(options)
       end
