@@ -14,8 +14,7 @@ RSpec.describe GreenLog::SimpleWriter do
   end
 
   def log(**args)
-    entry = GreenLog::Entry.with(**args)
-    writer.call(entry)
+    writer << GreenLog::Entry.with(**args)
   end
 
   def self.log(**args)
@@ -37,7 +36,7 @@ RSpec.describe GreenLog::SimpleWriter do
     end
   end
 
-  describe "#call" do
+  describe "#<<" do
 
     context "a default entry" do
       log

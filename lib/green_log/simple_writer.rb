@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "green_log/entry"
 require "green_log/severity"
 
 module GreenLog
@@ -11,7 +12,11 @@ module GreenLog
       @io = io
     end
 
-    def call(entry)
+    def <<(entry)
+      unless entry.is_a?(GreenLog::Entry)
+        raise ArgumentError, "GreenLog::Entry expected"
+      end
+
       @io << [
         format_part(entry, :severity),
         format_part(entry, :context),

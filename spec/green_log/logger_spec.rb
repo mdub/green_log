@@ -6,10 +6,9 @@ require "green_log/severity"
 RSpec.describe GreenLog::Logger do
 
   let(:log) { [] }
-  let(:log_sink) { log.method(:<<) }
   let(:last_entry) { log.last }
 
-  subject(:logger) { described_class.new(log_sink) }
+  subject(:logger) { described_class.new(log) }
 
   describe "#level" do
 
