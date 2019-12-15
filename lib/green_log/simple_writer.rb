@@ -21,7 +21,8 @@ module GreenLog
         format_part(entry, :severity),
         format_part(entry, :context),
         "--",
-        format_part(entry, :message)
+        format_part(entry, :message),
+        format_part(entry, :data)
       ].compact.join(" ") + "\n"
     end
 
@@ -38,12 +39,14 @@ module GreenLog
       Severity.name(severity)[0].upcase
     end
 
-    def format_context(context)
-      return nil if context.empty?
+    def format_data(data)
+      return nil if data.empty?
 
-      parts = context.map { |k, v| "#{k}=#{v.inspect}" }
+      parts = data.map { |k, v| "#{k}=#{v.inspect}" }
       "[" + parts.join(" ") + "]"
     end
+
+    alias format_context format_data
 
     def format_message(message)
       message
