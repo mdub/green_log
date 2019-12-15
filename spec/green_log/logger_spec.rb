@@ -6,7 +6,6 @@ require "green_log/severity"
 RSpec.describe GreenLog::Logger do
 
   let(:log) { [] }
-  let(:last_entry) { log.last }
 
   subject(:logger) { described_class.new(log) }
 
@@ -59,6 +58,20 @@ RSpec.describe GreenLog::Logger do
 
     end
 
+    context "with a string argument" do
+
+      let(:message_string) { "Stuff happened" }
+
+      before do
+        logger.log(logger.level, message_string)
+      end
+
+      it "sets the message" do
+        expect(log.last.message).to eq(message_string)
+      end
+
+    end
+
   end
 
   describe "#debug" do
@@ -68,7 +81,7 @@ RSpec.describe GreenLog::Logger do
     end
 
     it "logs at severity DEBUG" do
-      expect(last_entry.severity).to eq(GreenLog::Severity::DEBUG)
+      expect(log.last.severity).to eq(GreenLog::Severity::DEBUG)
     end
 
   end
@@ -80,7 +93,7 @@ RSpec.describe GreenLog::Logger do
     end
 
     it "logs at severity INFO" do
-      expect(last_entry.severity).to eq(GreenLog::Severity::INFO)
+      expect(log.last.severity).to eq(GreenLog::Severity::INFO)
     end
 
   end
@@ -92,7 +105,7 @@ RSpec.describe GreenLog::Logger do
     end
 
     it "logs at severity WARN" do
-      expect(last_entry.severity).to eq(GreenLog::Severity::WARN)
+      expect(log.last.severity).to eq(GreenLog::Severity::WARN)
     end
 
   end
@@ -104,7 +117,7 @@ RSpec.describe GreenLog::Logger do
     end
 
     it "logs at severity ERROR" do
-      expect(last_entry.severity).to eq(GreenLog::Severity::ERROR)
+      expect(log.last.severity).to eq(GreenLog::Severity::ERROR)
     end
 
   end
@@ -116,7 +129,7 @@ RSpec.describe GreenLog::Logger do
     end
 
     it "logs at severity FATAL" do
-      expect(last_entry.severity).to eq(GreenLog::Severity::FATAL)
+      expect(log.last.severity).to eq(GreenLog::Severity::FATAL)
     end
 
   end
