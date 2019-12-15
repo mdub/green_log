@@ -22,6 +22,8 @@ module GreenLog
 
     def log(severity, message)
       severity = Severity.resolve(severity)
+      return false if level > severity
+
       entry = Entry.with(severity: severity, message: message)
       downstream.call(entry)
     end

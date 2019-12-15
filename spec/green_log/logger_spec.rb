@@ -5,9 +5,9 @@ require "green_log/severity"
 
 RSpec.describe GreenLog::Logger do
 
-  let(:entries) { [] }
-  let(:log_sink) { entries.method(:<<) }
-  let(:last_entry) { entries.last }
+  let(:log) { [] }
+  let(:log_sink) { log.method(:<<) }
+  let(:last_entry) { log.last }
 
   subject(:logger) { described_class.new(log_sink) }
 
@@ -29,6 +29,29 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  context "with a specified level" do
+
+    before do
+      logger.level = "WARN"
+    end
+
+    it "logs events at the specific level" do
+      logger.warn("Warning")
+      expect(last_entry.message).to eq("Warning")
+    end
+
+    it "logs events above the specific level" do
+      logger.error("Oh sh!t")
+      expect(last_entry.message).to eq("Oh sh!t")
+    end
+
+    it "ignores events below that level" do
+      logger.info("Stuff happened")
+      expect(log).to be_empty
+    end
+
+  end
+
   describe "#info" do
 
     context "with a message" do
@@ -43,6 +66,19 @@ RSpec.describe GreenLog::Logger do
 
       it "logs at severity INFO" do
         expect(last_entry.severity).to eq(GreenLog::Severity::INFO)
+      end
+
+    end
+
+    context "with logger level WARN" do
+
+      before do
+        logger.level = "WARN"
+        logger.info("Stuff happened")
+      end
+
+      it "logs nothing" do
+        expect(log).to be_empty
       end
 
     end
