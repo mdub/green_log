@@ -24,7 +24,7 @@ module GreenLog
       severity = Severity.resolve(severity)
       return false if level > severity
 
-      entry = Entry.build(*rest, severity: severity)
+      entry = Entry.build(severity, *rest)
       downstream << entry
     end
 

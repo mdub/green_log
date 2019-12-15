@@ -21,7 +21,7 @@ module GreenLog
         super(**args)
       end
 
-      def build(*args, severity: Severity::INFO)
+      def build(severity, *args)
         options = { severity: severity }
         args.each do |arg|
           options[arg_type(arg)] = arg

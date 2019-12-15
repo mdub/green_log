@@ -112,7 +112,7 @@ RSpec.describe GreenLog::Entry do
     context "with a :severity" do
 
       subject(:entry) do
-        GreenLog::Entry.build(severity: "WARN")
+        GreenLog::Entry.build(GreenLog::Severity::WARN)
       end
 
       it "sets severity" do
@@ -124,7 +124,7 @@ RSpec.describe GreenLog::Entry do
     context "with a String" do
 
       subject(:entry) do
-        GreenLog::Entry.build("Hello")
+        GreenLog::Entry.build(GreenLog::Severity::INFO, "Hello")
       end
 
       it "sets message" do
