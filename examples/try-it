@@ -1,0 +1,14 @@
+#! /usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+
+require "green_log/logger"
+require "green_log/simple_writer"
+require "pry"
+
+logger = GreenLog::Logger.new(
+  GreenLog::SimpleWriter.new(STDOUT)
+)
+
+logger.pry
