@@ -25,15 +25,21 @@ module GreenLog
       end
 
       def resolve(arg)
-        value = case arg
-                when Integer
-                  arg
-                when Symbol, String
-                  NAMES.index(arg.to_s.upcase)
-                end
+        value = _resolve(arg)
         return value if value && (DEBUG..FATAL).cover?(value)
 
         raise ArgumentError, "invalid severity: #{arg.inspect}"
+      end
+
+      private
+
+      def _resolve(arg)
+        case arg
+        when Integer
+          arg
+        when Symbol, String
+          NAMES.index(arg.to_s.upcase)
+        end
       end
 
     end
