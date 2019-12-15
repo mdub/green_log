@@ -107,6 +107,34 @@ RSpec.describe GreenLog::Entry do
 
   end
 
+  describe ".build" do
+
+    context "with a :severity" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity: "WARN")
+      end
+
+      it "sets severity" do
+        expect(entry.severity).to eq(GreenLog::Severity::WARN)
+      end
+
+    end
+
+    context "with a String" do
+
+      subject(:entry) do
+        GreenLog::Entry.build("Hello")
+      end
+
+      it "sets message" do
+        expect(entry.message).to eq("Hello")
+      end
+
+    end
+
+  end
+
   describe "#with_context" do
 
     let(:original_context) do

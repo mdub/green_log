@@ -58,16 +58,49 @@ RSpec.describe GreenLog::Logger do
 
     end
 
-    context "with a string argument" do
+    let(:message) { "Stuff happened" }
+    let(:data) { { x: 1, y: 2 } }
 
-      let(:message_string) { "Stuff happened" }
+    context "with a String argument" do
 
       before do
-        logger.log(logger.level, message_string)
+        logger.log(logger.level, message)
       end
 
       it "sets the message" do
-        expect(log.last.message).to eq(message_string)
+        expect(log.last.message).to eq(message)
+      end
+
+    end
+
+    context "with a Hash argument" do
+
+      before do
+        logger.log(logger.level, data)
+      end
+
+      it "does not sets a message" do
+        expect(log.last.message).to be_nil
+      end
+
+      it "sets the data" do
+        expect(log.last.data).to eq(data)
+      end
+
+    end
+
+    context "with String and Hash arguments" do
+
+      before do
+        logger.log(logger.level, message, data)
+      end
+
+      it "sets the message" do
+        expect(log.last.message).to eq(message)
+      end
+
+      it "sets the data" do
+        expect(log.last.data).to eq(data)
       end
 
     end

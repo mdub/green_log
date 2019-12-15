@@ -20,11 +20,11 @@ module GreenLog
       @level = Severity.resolve(severity)
     end
 
-    def log(severity, message)
+    def log(severity, *rest)
       severity = Severity.resolve(severity)
       return false if level > severity
 
-      entry = Entry.with(severity: severity, message: message)
+      entry = Entry.build(*rest, severity: severity)
       downstream << entry
     end
 
