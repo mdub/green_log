@@ -28,52 +28,29 @@ RSpec.describe GreenLog::Logger do
 
   end
 
-  context "with a specified level" do
+  describe "#log" do
 
     before do
       logger.level = "WARN"
     end
 
-    it "logs events at the specific level" do
-      logger.warn("Warning")
-      expect(last_entry.message).to eq("Warning")
-    end
-
-    it "logs events above the specific level" do
-      logger.error("Oh sh!t")
-      expect(last_entry.message).to eq("Oh sh!t")
-    end
-
-    it "ignores events below that level" do
-      logger.info("Stuff happened")
-      expect(log).to be_empty
-    end
-
-  end
-
-  describe "#info" do
-
-    context "with a message" do
+    context "with severity at or above the specified threshold" do
 
       before do
-        logger.info("Hello")
+        logger.log(logger.level, "Stuff happened")
+        logger.log(logger.level + 1, "More stuff happened")
       end
 
-      it "logs the message" do
-        expect(last_entry.message).to eq("Hello")
-      end
-
-      it "logs at severity INFO" do
-        expect(last_entry.severity).to eq(GreenLog::Severity::INFO)
+      it "logs events" do
+        expect(log.size).to eq(2)
       end
 
     end
 
-    context "with logger level WARN" do
+    context "with severity below the specified threshold" do
 
       before do
-        logger.level = "WARN"
-        logger.info("Stuff happened")
+        logger.log(logger.level - 1, "Boring stuff")
       end
 
       it "logs nothing" do
@@ -92,6 +69,18 @@ RSpec.describe GreenLog::Logger do
 
     it "logs at severity DEBUG" do
       expect(last_entry.severity).to eq(GreenLog::Severity::DEBUG)
+    end
+
+  end
+
+  describe "#info" do
+
+    before do
+      logger.info("Watch out")
+    end
+
+    it "logs at severity INFO" do
+      expect(last_entry.severity).to eq(GreenLog::Severity::INFO)
     end
 
   end
