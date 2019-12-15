@@ -39,10 +39,8 @@ RSpec.describe GreenLog::Entry do
         GreenLog::Entry.with(message: "hello")
       end
 
-      describe "#message" do
-        it "is set" do
-          expect(entry.message).to eq("hello")
-        end
+      it "sets #message" do
+        expect(entry.message).to eq("hello")
       end
 
     end
@@ -53,10 +51,8 @@ RSpec.describe GreenLog::Entry do
         GreenLog::Entry.with(severity: "debug")
       end
 
-      describe "#severity" do
-        it "is set" do
-          expect(entry.severity).to eq(GreenLog::Severity::DEBUG)
-        end
+      it "sets #severity" do
+        expect(entry.severity).to eq(GreenLog::Severity::DEBUG)
       end
 
     end
@@ -68,13 +64,43 @@ RSpec.describe GreenLog::Entry do
       end
 
       subject(:entry) do
-        GreenLog::Entry.with(context: :debug)
+        GreenLog::Entry.with(context: test_context)
       end
 
-      describe "#context" do
-        it "is set" do
-          expect(entry.context).to eq(:debug)
-        end
+      it "sets #context" do
+        expect(entry.context).to eq(test_context)
+      end
+
+    end
+
+    context "with :data" do
+
+      let(:test_data) do
+        { duration: 123 }.freeze
+      end
+
+      subject(:entry) do
+        GreenLog::Entry.with(data: test_data)
+      end
+
+      it "sets #data" do
+        expect(entry.data).to eq(test_data)
+      end
+
+    end
+
+    context "with an exception" do
+
+      let(:test_exception) do
+        StandardError.new("argh")
+      end
+
+      subject(:entry) do
+        GreenLog::Entry.with(exception: test_exception)
+      end
+
+      it "sets #exception" do
+        expect(entry.exception).to be(test_exception)
       end
 
     end

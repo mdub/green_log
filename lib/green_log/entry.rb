@@ -6,13 +6,18 @@ require "values"
 module GreenLog
 
   # Represents a structured log entry.
-  class Entry < Value.new(:message, :severity, :context)
+  class Entry < Value.new(:severity, :message, :context, :data, :exception)
 
-    def self.with(message: nil, severity: nil, context: nil)
+    def self.with(
+      severity: nil, message: nil,
+      context: nil, data: nil, exception: nil
+    )
       super(
-        message: message,
         severity: Severity.resolve(severity || Severity::INFO),
-        context: (context || {})
+        message: message,
+        context: (context || {}),
+        data: (data || {}),
+        exception: exception,
       )
     end
 
