@@ -16,9 +16,9 @@ module GreenLog
     # An unhandleable error that results in a program crash.
     FATAL = 4
 
-    class << self
+    NAMES = %w[DEBUG INFO WARN ERROR FATAL].freeze
 
-      NAMES = %w[DEBUG INFO WARN ERROR FATAL].freeze
+    class << self
 
       def name(severity)
         NAMES[severity]

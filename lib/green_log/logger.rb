@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/entry"
+require "green_log/severity"
 
 module GreenLog
 
@@ -13,8 +14,30 @@ module GreenLog
 
     attr_reader :downstream
 
-    def info(message)
-      downstream.call(Entry.with(message: message))
+    def log(severity, message)
+      severity = Severity.resolve(severity)
+      entry = Entry.with(severity: severity, message: message)
+      downstream.call(entry)
+    end
+
+    def debug(*args)
+      log(Severity::DEBUG, *args)
+    end
+
+    def info(*args)
+      log(Severity::INFO, *args)
+    end
+
+    def warn(*args)
+      log(Severity::WARN, *args)
+    end
+
+    def error(*args)
+      log(Severity::ERROR, *args)
+    end
+
+    def fatal(*args)
+      log(Severity::FATAL, *args)
     end
 
   end

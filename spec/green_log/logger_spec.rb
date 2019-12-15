@@ -31,4 +31,52 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  describe "#debug" do
+
+    before do
+      logger.debug("Watch out")
+    end
+
+    it "logs at severity DEBUG" do
+      expect(last_entry.severity).to eq(GreenLog::Severity::DEBUG)
+    end
+
+  end
+
+  describe "#warn" do
+
+    before do
+      logger.warn("Watch out")
+    end
+
+    it "logs at severity WARN" do
+      expect(last_entry.severity).to eq(GreenLog::Severity::WARN)
+    end
+
+  end
+
+  describe "#error" do
+
+    before do
+      logger.error("Watch out")
+    end
+
+    it "logs at severity ERROR" do
+      expect(last_entry.severity).to eq(GreenLog::Severity::ERROR)
+    end
+
+  end
+
+  describe "#fatal" do
+
+    before do
+      logger.fatal("Watch out")
+    end
+
+    it "logs at severity FATAL" do
+      expect(last_entry.severity).to eq(GreenLog::Severity::FATAL)
+    end
+
+  end
+
 end
