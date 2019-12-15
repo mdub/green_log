@@ -24,14 +24,24 @@ module GreenLog
       def build(*args, severity: Severity::INFO)
         options = { severity: severity }
         args.each do |arg|
-          case arg
-          when String
-            options[:message] = arg
-          when Hash
-            options[:data] = arg
-          end
+          options[arg_type(arg)] = arg
         end
         with(options)
+      end
+
+      private
+
+      def arg_type(arg)
+        case arg
+        when String
+          :message
+        when Hash
+          :data
+        when Exception
+          :exception
+        else
+          raise ArgumentError, "un-loggable argument: #{arg.inspect}"
+        end
       end
 
     end

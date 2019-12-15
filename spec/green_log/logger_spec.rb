@@ -60,6 +60,7 @@ RSpec.describe GreenLog::Logger do
 
     let(:message) { "Stuff happened" }
     let(:data) { { x: 1, y: 2 } }
+    let(:exception) { StandardError.new("Ah, bugger!") }
 
     context "with a String argument" do
 
@@ -85,6 +86,22 @@ RSpec.describe GreenLog::Logger do
 
       it "sets the data" do
         expect(log.last.data).to eq(data)
+      end
+
+    end
+
+    context "with an Exception argument" do
+
+      before do
+        logger.log(logger.level, exception)
+      end
+
+      it "does not sets a message" do
+        expect(log.last.message).to be_nil
+      end
+
+      it "sets the exception" do
+        expect(log.last.exception).to eq(exception)
       end
 
     end
