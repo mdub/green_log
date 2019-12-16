@@ -26,6 +26,7 @@ module GreenLog
 
       entry = Entry.build(severity, *rest, &block)
       downstream << entry
+      true
     end
 
     def debug(*args, &block)

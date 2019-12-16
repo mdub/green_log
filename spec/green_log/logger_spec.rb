@@ -35,7 +35,7 @@ RSpec.describe GreenLog::Logger do
 
     context "with severity at or above the specified threshold" do
 
-      before do
+      let!(:return_value) do
         logger.log(logger.level, "Stuff happened")
         logger.log(logger.level + 1, "More stuff happened")
       end
@@ -44,16 +44,24 @@ RSpec.describe GreenLog::Logger do
         expect(log.size).to eq(2)
       end
 
+      it "returns true" do
+        expect(return_value).to be(true)
+      end
+
     end
 
     context "with severity below the specified threshold" do
 
-      before do
+      let!(:return_value) do
         logger.log(logger.level - 1, "Boring stuff")
       end
 
       it "logs nothing" do
         expect(log).to be_empty
+      end
+
+      it "returns false" do
+        expect(return_value).to be(false)
       end
 
     end
