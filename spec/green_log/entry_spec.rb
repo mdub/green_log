@@ -121,14 +121,17 @@ RSpec.describe GreenLog::Entry do
 
     end
 
+    let(:severity) { GreenLog::Severity::INFO }
+    let(:message) { "Stuff happened" }
+
     context "with a String" do
 
       subject(:entry) do
-        GreenLog::Entry.build(GreenLog::Severity::INFO, "Hello")
+        GreenLog::Entry.build(severity, message)
       end
 
       it "sets message" do
-        expect(entry.message).to eq("Hello")
+        expect(entry.message).to eq(message)
       end
 
     end
@@ -137,8 +140,88 @@ RSpec.describe GreenLog::Entry do
 
       it "complains" do
         expect do
-          GreenLog::Entry.build(GreenLog::Severity::INFO, "Hello", "there")
+          GreenLog::Entry.build(severity, "Hello", "there")
         end.to raise_error(ArgumentError, "multiple message arguments specified")
+      end
+
+    end
+
+    let(:data) { { x: 1, y: 2 } }
+
+    context "with a Hash argument" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity, data)
+      end
+
+      it "sets the data" do
+        expect(entry.data).to eq(data)
+      end
+
+      it "does not set a message" do
+        expect(entry.message).to be_nil
+      end
+
+    end
+
+    context "with a Hash argument, unpacked" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity, **data)
+      end
+
+      it "sets the data" do
+        expect(entry.data).to eq(data)
+      end
+
+    end
+
+    let(:exception) { StandardError.new("Ah, bugger!") }
+
+    context "with an Exception argument" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity, exception)
+      end
+
+      it "sets the exception" do
+        expect(entry.exception).to eq(exception)
+      end
+
+      it "does not set a message" do
+        expect(entry.message).to be_nil
+      end
+
+    end
+
+    context "with String and Hash arguments" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity, message, data)
+      end
+
+      it "sets the message" do
+        expect(entry.message).to eq(message)
+      end
+
+      it "sets the data" do
+        expect(entry.data).to eq(data)
+      end
+
+    end
+
+    context "with String and Exception arguments" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity, message, exception)
+      end
+
+      it "sets the message" do
+        expect(entry.message).to eq(message)
+      end
+
+      it "sets the exception" do
+        expect(entry.exception).to eq(exception)
       end
 
     end
