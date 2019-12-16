@@ -226,6 +226,36 @@ RSpec.describe GreenLog::Entry do
 
     end
 
+    context "with a block that returns a String" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity) do
+          message
+        end
+      end
+
+      it "sets the message" do
+        expect(entry.message).to eq(message)
+      end
+
+    end
+
+    context "with a block that returns an Array" do
+
+      subject(:entry) do
+        GreenLog::Entry.build(severity) do
+          [message, data, exception]
+        end
+      end
+
+      it "sets multiple components" do
+        expect(entry.message).to eq(message)
+        expect(entry.data).to eq(data)
+        expect(entry.exception).to eq(exception)
+      end
+
+    end
+
   end
 
   describe "#with_context" do

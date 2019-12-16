@@ -21,18 +21,42 @@ module GreenLog
         super(**args)
       end
 
-      def build(severity, *args)
-        options = { severity: severity }
-        args.each do |arg|
-          type = arg_type(arg)
-          raise ArgumentError, "multiple #{type} arguments specified" if options.key?(type)
+      def build(severity, *args, &block)
+        Builder.new(severity).build(*args, &block)
+      end
 
-          options[type] = arg
+    end
+
+    def with_context(extra_context)
+      with(context: context.merge(extra_context))
+    end
+
+    # A builder for entries.
+    class Builder
+
+      def initialize(severity)
+        @options = { severity: severity }
+      end
+
+      attr_reader :options
+
+      def build(*args, &block)
+        args.each(&method(:handle_arg))
+        if block
+          values_from_block = Array(block.call)
+          values_from_block.each(&method(:handle_arg))
         end
-        with(options)
+        Entry.with(options)
       end
 
       private
+
+      def handle_arg(arg)
+        type = arg_type(arg)
+        raise ArgumentError, "multiple #{type} arguments specified" if options.key?(type)
+
+        options[type] = arg
+      end
 
       def arg_type(arg)
         case arg
@@ -47,10 +71,6 @@ module GreenLog
         end
       end
 
-    end
-
-    def with_context(extra_context)
-      with(context: context.merge(extra_context))
     end
 
   end
