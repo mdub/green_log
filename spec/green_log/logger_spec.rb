@@ -184,4 +184,21 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  describe "#with_context" do
+
+    let(:message) { "Stuff happened" }
+    let(:context) { { thread: "main" } }
+
+    let!(:logger_with_context) do
+      logger.with_context(context)
+    end
+
+    it "adds context to log entries" do
+      logger_with_context.info(message)
+      expect(log.last.context).to eq(context)
+      expect(log.last.message).to eq(message)
+    end
+
+  end
+
 end

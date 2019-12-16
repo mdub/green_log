@@ -29,7 +29,7 @@ module GreenLog
     end
 
     def with_context(extra_context)
-      with(context: context.merge(extra_context))
+      with(context: extra_context.merge(context))
     end
 
     # A builder for entries.

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "green_log/contextualizer"
 require "green_log/entry"
 require "green_log/severity"
 
@@ -8,9 +9,9 @@ module GreenLog
   # Represents a structured log entry.
   class Logger
 
-    def initialize(downstream)
+    def initialize(downstream, level: Severity::DEBUG)
       @downstream = downstream
-      @level = Severity::DEBUG
+      @level = level
     end
 
     attr_reader :downstream
@@ -47,6 +48,14 @@ module GreenLog
 
     def fatal(*args, &block)
       log(Severity::FATAL, *args, &block)
+    end
+
+    def with_context(context)
+      with_downstream Contextualizer.new(downstream, context)
+    end
+
+    def with_downstream(new_downstream)
+      self.class.new(new_downstream, level: level)
     end
 
   end
