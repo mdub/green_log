@@ -141,7 +141,7 @@ RSpec.describe GreenLog::Entry do
       it "complains" do
         expect do
           GreenLog::Entry.build(severity, "Hello", "there")
-        end.to raise_error(ArgumentError, "multiple message arguments specified")
+        end.to raise_error(ArgumentError, ":message already specified")
       end
 
     end
@@ -249,6 +249,28 @@ RSpec.describe GreenLog::Entry do
       end
 
       it "sets multiple components" do
+        expect(entry.message).to eq(message)
+        expect(entry.data).to eq(data)
+        expect(entry.exception).to eq(exception)
+      end
+
+    end
+
+    context "with a block that takes an argument" do
+
+      it "doesn't use return values" do
+        entry = GreenLog::Entry.build(severity) do |_b|
+          message
+        end
+        expect(entry.message).to be_nil
+      end
+
+      it "allows components to be set" do
+        entry = GreenLog::Entry.build(severity) do |e|
+          e.message = message
+          e.data = data
+          e.exception = exception
+        end
         expect(entry.message).to eq(message)
         expect(entry.data).to eq(data)
         expect(entry.exception).to eq(exception)

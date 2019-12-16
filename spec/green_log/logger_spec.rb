@@ -98,6 +98,22 @@ RSpec.describe GreenLog::Logger do
 
     end
 
+    context "with a block" do
+
+      before do
+        logger.log(logger.level) do |e|
+          e.message = message
+          e.data = data
+        end
+      end
+
+      it "allows properties to be set" do
+        expect(log.last.message).to eq(message)
+        expect(log.last.data).to eq(data)
+      end
+
+    end
+
   end
 
   describe "#debug" do

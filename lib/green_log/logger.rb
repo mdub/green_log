@@ -20,32 +20,32 @@ module GreenLog
       @level = Severity.resolve(severity)
     end
 
-    def log(severity, *rest)
+    def log(severity, *rest, &block)
       severity = Severity.resolve(severity)
       return false if level > severity
 
-      entry = Entry.build(severity, *rest)
+      entry = Entry.build(severity, *rest, &block)
       downstream << entry
     end
 
-    def debug(*args)
-      log(Severity::DEBUG, *args)
+    def debug(*args, &block)
+      log(Severity::DEBUG, *args, &block)
     end
 
-    def info(*args)
-      log(Severity::INFO, *args)
+    def info(*args, &block)
+      log(Severity::INFO, *args, &block)
     end
 
-    def warn(*args)
-      log(Severity::WARN, *args)
+    def warn(*args, &block)
+      log(Severity::WARN, *args, &block)
     end
 
-    def error(*args)
-      log(Severity::ERROR, *args)
+    def error(*args, &block)
+      log(Severity::ERROR, *args, &block)
     end
 
-    def fatal(*args)
-      log(Severity::FATAL, *args)
+    def fatal(*args, &block)
+      log(Severity::FATAL, *args, &block)
     end
 
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/severity"
+require "ostruct"
 require "values"
 
 module GreenLog
@@ -35,27 +36,48 @@ module GreenLog
     class Builder
 
       def initialize(severity)
-        @options = { severity: severity }
+        @severity = severity
       end
 
-      attr_reader :options
+      attr_reader :severity
+      attr_reader :message
+      attr_reader :data
+      attr_reader :exception
+
+      def message=(arg)
+        raise ArgumentError, ":message already specified" if defined?(@message)
+
+        @message = arg
+      end
+
+      def data=(arg)
+        raise ArgumentError, ":data already specified" if defined?(@data)
+
+        @data = arg
+      end
+
+      def exception=(arg)
+        raise ArgumentError, ":exception already specified" if defined?(@exception)
+
+        @exception = arg
+      end
 
       def build(*args, &block)
         args.each(&method(:handle_arg))
         if block
-          values_from_block = Array(block.call)
-          values_from_block.each(&method(:handle_arg))
+          if block.arity.zero?
+            Array(block.call).each(&method(:handle_arg))
+          else
+            block.call(self)
+          end
         end
-        Entry.with(options)
+        Entry.with(severity: severity, message: message, data: data, exception: exception)
       end
 
       private
 
       def handle_arg(arg)
-        type = arg_type(arg)
-        raise ArgumentError, "multiple #{type} arguments specified" if options.key?(type)
-
-        options[type] = arg
+        public_send("#{arg_type(arg)}=", arg)
       end
 
       def arg_type(arg)
