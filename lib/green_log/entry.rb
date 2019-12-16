@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "green_log/severity"
-require "ostruct"
 require "values"
 
 module GreenLog
