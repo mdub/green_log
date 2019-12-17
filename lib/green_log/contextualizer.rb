@@ -14,7 +14,7 @@ module GreenLog
     attr_reader :context
 
     def <<(entry)
-      downstream << entry.with_context(context)
+      downstream << entry.in_context(context)
     end
 
   end

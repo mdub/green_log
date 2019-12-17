@@ -27,7 +27,7 @@ module GreenLog
 
     end
 
-    def with_context(extra_context)
+    def in_context(extra_context)
       with(context: extra_context.merge(context))
     end
 

@@ -280,7 +280,7 @@ RSpec.describe GreenLog::Entry do
 
   end
 
-  describe "#with_context" do
+  describe "#in_context" do
 
     let(:original_context) do
       {
@@ -301,7 +301,7 @@ RSpec.describe GreenLog::Entry do
     end
 
     let!(:result) do
-      original_entry.with_context(extra_context)
+      original_entry.in_context(extra_context)
     end
 
     it "adds the new context" do
