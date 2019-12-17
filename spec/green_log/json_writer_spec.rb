@@ -66,7 +66,7 @@ RSpec.describe GreenLog::JsonWriter do
       log(data: { duration: 42 })
     end
 
-    it "includes the message" do
+    it "includes the data" do
       expect(output_data).to include(
         "data" => {
           "duration" => 42
