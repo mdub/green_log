@@ -1,5 +1,7 @@
 # GreenLog
 
+![](https://github.com/greensync/green_log/workflows/CI/badge.svg)
+
 GreenLog is a logging library for Ruby applications.  It:
 
 - focuses on [structured logging](https://www.thoughtworks.com/radar/techniques/structured-logging) - treating log entries as data
