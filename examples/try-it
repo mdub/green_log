@@ -8,16 +8,14 @@ require "green_log/json_writer"
 require "green_log/simple_writer"
 require "pry"
 
-include GreenLog
-
-writer_class = case ARGV.first
+case ARGV.first
 when "json"
-  JsonWriter
+  writer_class = GreenLog::JsonWriter
 when "simple", nil
-  SimpleWriter
+  writer_class = GreenLog::SimpleWriter
 else
   raise ArgumentError, "bad format: #{ARGV.first}"
 end
 
-logger = Logger.new(writer_class.new(STDOUT))
+logger = GreenLog::Logger.new(writer_class.new(STDOUT))
 logger.pry
