@@ -36,7 +36,7 @@ Logger->>Middleware: <<(entry)
 Middleware->>Writer: <<(entry)
 ```
 
-This approach is based on[Rack](https://github.com/rack/rack)'s "middleware" concept.
+This approach is based on [Rack](https://github.com/rack/rack)'s "middleware" concept.
 
 ### Alternatives considered
 
