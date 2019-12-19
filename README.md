@@ -36,7 +36,13 @@ logger.info("Stuff happened")
 logger.warn("Too many requests", user: user_id)
 ```
 
-TODO: Write usage instructions here
+## Design approach
+
+GreenLog:
+
+- [avoids global state](doc/adr/0002-avoid-global-configuration.md)
+- explicitly [decouples log entry generation and handling](0003-decouple-generation-and-handling.md)
+- uses a "[handler stacking](0004-use-stacked-handlers-to-solve-many-problems.md)" (similar to Rack middleware) to enable flexible log management
 
 ## Contributing
 
