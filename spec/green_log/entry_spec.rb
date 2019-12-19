@@ -71,6 +71,19 @@ RSpec.describe GreenLog::Entry do
         expect(entry.context).to eq(test_context)
       end
 
+      context "with String keys" do
+
+        let(:test_context) do
+          { "size" => 4 }
+        end
+
+        it "converts Strings to symbols" do
+          pending
+          expect(entry.context).to eq(size: 4)
+        end
+
+      end
+
     end
 
     context "with :data" do
