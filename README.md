@@ -42,7 +42,7 @@ GreenLog:
 
 - [avoids global state](doc/adr/0002-avoid-global-configuration.md)
 - explicitly [decouples log entry generation and handling](doc/adr/0003-decouple-generation-and-handling.md)
-- uses a "[handler stacking](doc/adr/0004-use-stacked-handlers-to-solve-many-problems.md)" (similar to Rack middleware) to enable flexible log management
+- uses "[handler stacking](doc/adr/0004-use-stacked-handlers-to-solve-many-problems.md)" (similar to Rack middleware) to enable flexible log management
 
 ## Contributing
 
