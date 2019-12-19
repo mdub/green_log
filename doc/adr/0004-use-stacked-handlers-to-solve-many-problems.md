@@ -31,9 +31,9 @@ We will favour "stacking" handlers to solve such problems. That is:
 ```mermaid
 sequenceDiagram
 
-App->>Logger: info("Message")
-Logger->>Middleware: <<(entry)
-Middleware->>Writer: <<(entry)
+App ->> Logger:         info("Message")
+Logger ->> Middleware:  <<(entry)
+Middleware ->> Writer:  <<(entry)
 ```
 
 This approach is based on [Rack](https://github.com/rack/rack)'s "middleware" concept.

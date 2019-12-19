@@ -21,8 +21,8 @@ De-couple generation of log message/entries from how they are handled.
 ```mermaid
 sequenceDiagram
 
-App->>Logger: info("Message")
-Logger->>Handler: <<(entry)
+App ->> Logger:       info("Message")
+Logger ->> Handler:   <<(entry)
 ```
 
 ## Consequences
