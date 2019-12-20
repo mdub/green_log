@@ -47,6 +47,30 @@ RSpec.describe GreenLog::Loggable::Hash do
       expect(subject.to_h).to eq(original_input)
     end
 
+    describe "#merge" do
+
+      subject(:result) do
+        loggable_hash.merge(new_data)
+      end
+
+      context "with a ::Hash" do
+
+        let(:new_data) do
+          { x: 11, flavour: "mud" }
+        end
+
+        it "returns a new Loggable::Hash" do
+          expect(result).to be_kind_of(described_class)
+        end
+
+        it "works like Hash#merge" do
+          expect(result.to_h).to eq(loggable_hash.to_h.merge(new_data))
+        end
+
+      end
+
+    end
+
   end
 
   context "with String keys" do

@@ -33,6 +33,10 @@ module GreenLog
         end
       end
 
+      def merge(other_data)
+        self.class.new(to_h.merge(other_data.to_h))
+      end
+
       alias to_ruby_data to_h
 
     end
