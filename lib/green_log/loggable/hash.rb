@@ -34,7 +34,19 @@ module GreenLog
       end
 
       def merge(other_data)
-        self.class.new(to_h.merge(other_data.to_h))
+        other_data = other_data.to_loggable_value
+        merged_data = entries.merge(other_data.entries) do |_key, old, new|
+          if old.is_a?(Loggable::Hash) && new.is_a?(Loggable::Hash)
+            old.merge(new)
+          else
+            new
+          end
+        end
+        self.class.new(merged_data)
+      end
+
+      def to_loggable_value
+        self
       end
 
       alias to_ruby_data to_h
