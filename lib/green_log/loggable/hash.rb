@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "green_log/loggable/conversions"
+
 module GreenLog
 
   module Loggable
@@ -7,20 +9,31 @@ module GreenLog
     # A type of immutable Hash suitable for holding loggable data.
     class Hash
 
+      using Loggable::Conversions
+
       def initialize(data = {})
-        @data = data.transform_keys(&:to_sym)
-        @data.freeze
+        @entries = {}
+        data.each do |k, v|
+          entries[k.to_loggable_key] = v.to_loggable_value
+        end
+        @entries.freeze
       end
 
-      attr_reader :data
+      attr_reader :entries
 
       def empty?
-        data.empty?
+        entries.empty?
       end
 
       def to_h
-        data.to_h
+        {}.tap do |result|
+          entries.each do |k, v|
+            result[k] = v.to_ruby_data
+          end
+        end
       end
+
+      alias to_ruby_data to_h
 
     end
 

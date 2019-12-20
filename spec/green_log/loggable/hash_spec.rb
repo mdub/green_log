@@ -49,12 +49,43 @@ RSpec.describe GreenLog::Loggable::Hash do
 
   end
 
-  context "constructed with a simple Hash of values" do
+  context "with String keys" do
 
-    let(:input_hash) { { "thread" => "main" } }
+    let(:input_hash) do
+      {
+        "host" => "foo.example.com",
+        "thread" => {
+          "name" => "main"
+        }
+      }
+    end
 
     it "symbolises the keys" do
-      expect(subject.to_h).to eq(thread: "main")
+      expect(subject.to_h).to include(
+        host: "foo.example.com"
+      )
+    end
+
+    it "symbolises deeply" do
+      expect(subject.to_h).to include(
+        thread: {
+          name: "main"
+        }
+      )
+    end
+
+  end
+
+  context "with an Array value" do
+
+    let(:input_hash) do
+      {
+        "stuff" => [1, 2, 3]
+      }
+    end
+
+    it "whines" do
+      expect { subject }.to raise_error(ArgumentError, "arrays not supported here")
     end
 
   end
