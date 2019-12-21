@@ -8,12 +8,14 @@ RSpec.describe GreenLog::CoreRefinements do
 
   describe Hash do
 
-    let(:hash) { { host: "foo.example.com", pid: 123 } }
-
     describe "#to_loggable" do
+
+      let(:hash) { { host: "foo.example.com", pid: 123 } }
+
       it "returns a frozen Hash" do
         expect(hash.to_loggable).to be_frozen
       end
+
     end
 
     context "with String keys" do
