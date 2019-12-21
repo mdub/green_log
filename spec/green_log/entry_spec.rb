@@ -78,7 +78,6 @@ RSpec.describe GreenLog::Entry do
         end
 
         it "converts Strings to symbols" do
-          pending
           expect(entry.context).to eq(size: 4)
         end
 

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "green_log/core_refinements"
 require "green_log/severity"
 require "values"
 
@@ -8,6 +9,8 @@ module GreenLog
   # Represents a structured log entry.
   class Entry < Value.new(:severity, :message, :context, :data, :exception)
 
+    using CoreRefinements
+
     class << self
 
       def with(**args)
@@ -15,8 +18,8 @@ module GreenLog
           args.fetch(:severity, Severity::INFO)
         )
         args[:message] ||= nil
-        args[:context] ||= {}
-        args[:data] ||= {}
+        args[:context] = args.fetch(:context, {}).to_loggable
+        args[:data] = args.fetch(:data, {}).to_loggable
         args[:exception] ||= nil
         super(**args)
       end
@@ -28,7 +31,7 @@ module GreenLog
     end
 
     def in_context(extra_context)
-      with(context: extra_context.merge(context))
+      with(context: extra_context.merge(context).to_loggable)
     end
 
     # A builder for entries.
