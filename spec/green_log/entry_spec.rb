@@ -297,7 +297,10 @@ RSpec.describe GreenLog::Entry do
     let(:original_context) do
       {
         colour: "red",
-        flavour: "strawberry"
+        flavour: "strawberry",
+        user: {
+          name: "Stan"
+        }
       }
     end
 
@@ -308,7 +311,10 @@ RSpec.describe GreenLog::Entry do
     let(:extra_context) do
       {
         flavour: "watermelon",
-        direction: "north"
+        direction: "north",
+        user: {
+          id: 99
+        }
       }
     end
 
@@ -326,6 +332,12 @@ RSpec.describe GreenLog::Entry do
 
     it "retains other context" do
       expect(result.context).to include(colour: "red")
+    end
+
+    it "merges deeply" do
+      expect(result.context).to include(
+        user: { name: "Stan", id: 99 }
+      )
     end
 
   end

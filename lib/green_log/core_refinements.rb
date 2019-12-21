@@ -15,6 +15,17 @@ module GreenLog
         end.freeze
       end
 
+      def integrate(other)
+        other = other.to_hash
+        merge(other) do |_key, old_value, new_value|
+          if old_value.is_a?(Hash) && new_value.is_a?(Hash)
+            old_value.integrate(new_value)
+          else
+            new_value
+          end
+        end
+      end
+
     end
 
     refine ::Numeric do

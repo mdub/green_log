@@ -31,7 +31,7 @@ module GreenLog
     end
 
     def in_context(extra_context)
-      with(context: extra_context.merge(context).to_loggable)
+      with(context: extra_context.integrate(context).to_loggable)
     end
 
     # A builder for entries.

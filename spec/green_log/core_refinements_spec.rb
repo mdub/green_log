@@ -18,6 +18,41 @@ RSpec.describe GreenLog::CoreRefinements do
 
     end
 
+    describe "#integrate" do
+
+      it "merges deeply" do
+        original = {
+          author: {
+            name: "Jim"
+          }
+        }
+        new_data = {
+          author: {
+            age: 42
+          }
+        }
+        expect(original.integrate(new_data)).to eq(
+          author: {
+            name: "Jim",
+            age: 42
+          }
+        )
+      end
+
+      it "favours new data" do
+        original = {
+          hockey: 1
+        }
+        new_data = {
+          hockey: 2
+        }
+        expect(original.integrate(new_data)).to eq(
+          hockey: 2
+        )
+      end
+
+    end
+
     context "with String keys" do
 
       let(:hash) do
