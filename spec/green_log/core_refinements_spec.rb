@@ -42,4 +42,20 @@ RSpec.describe GreenLog::CoreRefinements do
 
   end
 
+  describe String do
+
+    describe "#to_loggable" do
+
+      it "returns a frozen duplicate" do
+        original = "Hello, world!".dup
+        result = original.to_loggable
+        expect(result).to eq(original)
+        expect(result).to be_frozen
+        expect(original).to_not be_frozen
+      end
+
+    end
+
+  end
+
 end
