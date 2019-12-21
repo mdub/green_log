@@ -8,11 +8,34 @@ RSpec.describe GreenLog::CoreRefinements do
 
   describe Hash do
 
-    describe "#to_loggable" do
+    let(:hash) { { host: "foo.example.com", pid: 123 } }
 
-      it "symbolizes keys" do
-        input = { "x" => 42 }
-        expect(input.to_loggable).to eq(x: 42)
+    describe "#to_loggable" do
+      it "returns a frozen Hash" do
+        expect(hash.to_loggable).to be_frozen
+      end
+    end
+
+    context "with String keys" do
+
+      let(:hash) do
+        {
+          "x" => 42,
+          "a" => { "b" => "c" }
+        }
+      end
+
+      describe "#to_loggable" do
+
+        it "symbolizes the keys" do
+          expect(hash.to_loggable).to eq(
+            x: 42,
+            a: {
+              b: "c"
+            }
+          )
+        end
+
       end
 
     end
