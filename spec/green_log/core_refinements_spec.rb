@@ -8,12 +8,12 @@ RSpec.describe GreenLog::CoreRefinements do
 
   describe Hash do
 
-    describe "#to_loggable" do
+    describe "#to_loggable_value" do
 
       let(:hash) { { host: "foo.example.com", pid: 123 } }
 
       it "returns a frozen Hash" do
-        expect(hash.to_loggable).to be_frozen
+        expect(hash.to_loggable_value).to be_frozen
       end
 
     end
@@ -62,10 +62,10 @@ RSpec.describe GreenLog::CoreRefinements do
         }
       end
 
-      describe "#to_loggable" do
+      describe "#to_loggable_value" do
 
         it "symbolizes the keys" do
-          expect(hash.to_loggable).to eq(
+          expect(hash.to_loggable_value).to eq(
             x: 42,
             a: {
               b: "c"
@@ -81,11 +81,11 @@ RSpec.describe GreenLog::CoreRefinements do
 
   describe String do
 
-    describe "#to_loggable" do
+    describe "#to_loggable_value" do
 
       it "returns a frozen duplicate" do
         original = "Hello, world!".dup
-        result = original.to_loggable
+        result = original.to_loggable_value
         expect(result).to eq(original)
         expect(result).to be_frozen
         expect(original).to_not be_frozen

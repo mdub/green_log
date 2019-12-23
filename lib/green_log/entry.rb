@@ -18,8 +18,8 @@ module GreenLog
           args.fetch(:severity, Severity::INFO)
         )
         args[:message] ||= nil
-        args[:context] = args.fetch(:context, {}).to_loggable
-        args[:data] = args.fetch(:data, {}).to_loggable
+        args[:context] = args.fetch(:context, {}).to_loggable_value
+        args[:data] = args.fetch(:data, {}).to_loggable_value
         args[:exception] ||= nil
         super(**args)
       end
@@ -31,7 +31,7 @@ module GreenLog
     end
 
     def in_context(extra_context)
-      with(context: extra_context.integrate(context).to_loggable)
+      with(context: extra_context.integrate(context).to_loggable_value)
     end
 
     # A builder for entries.

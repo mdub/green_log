@@ -7,10 +7,10 @@ module GreenLog
 
     refine ::Hash do
 
-      def to_loggable
+      def to_loggable_value
         {}.tap do |result|
           each do |k, v|
-            result[k.to_sym] = v.to_loggable
+            result[k.to_sym] = v.to_loggable_value
           end
         end.freeze
       end
@@ -30,7 +30,7 @@ module GreenLog
 
     refine ::Numeric do
 
-      def to_loggable
+      def to_loggable_value
         self
       end
 
@@ -38,7 +38,7 @@ module GreenLog
 
     refine ::String do
 
-      def to_loggable
+      def to_loggable_value
         frozen? ? self : dup.freeze
       end
 
@@ -46,7 +46,7 @@ module GreenLog
 
     refine ::NilClass do
 
-      def to_loggable
+      def to_loggable_value
         self
       end
 
@@ -54,7 +54,7 @@ module GreenLog
 
     refine ::TrueClass do
 
-      def to_loggable
+      def to_loggable_value
         self
       end
 
@@ -62,7 +62,7 @@ module GreenLog
 
     refine ::FalseClass do
 
-      def to_loggable
+      def to_loggable_value
         self
       end
 
