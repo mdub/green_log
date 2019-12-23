@@ -1,0 +1,21 @@
+#! /usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+
+require "green_log/logger"
+require "green_log/simple_writer"
+
+logger = GreenLog::Logger.new(GreenLog::SimpleWriter.new(STDOUT))
+
+threads = ("A".."Z").map do |label|
+  Thread.new do
+    1.upto(100) do
+      delay = rand / 10
+      logger.info("Hi", thread: label, delay: delay)
+      sleep(delay)
+    end
+  end
+end
+
+threads.each(&:join)
