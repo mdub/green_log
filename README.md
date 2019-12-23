@@ -6,8 +6,15 @@ GreenLog is a logging library for Ruby applications.  It:
 
 - focuses on [structured logging](https://www.thoughtworks.com/radar/techniques/structured-logging) - treating log entries as data
 - is optimised for use in modern "cloud-native" applications
-- uses patterns based on Rack middleware for log processing
 - can be used in place of Ruby's stdlib `Logger`
+
+## Design approach
+
+GreenLog:
+
+- [avoids global state](doc/adr/0002-avoid-global-configuration.md)
+- explicitly [decouples log entry generation and handling](doc/adr/0003-decouple-generation-and-handling.md)
+- uses [an approach similar to Rack middleware](doc/adr/0004-use-stacked-handlers-to-solve-many-problems.md) for flexible log processing
 
 ## Installation
 
@@ -35,14 +42,6 @@ logger = GreenLog::Logger.new(
 logger.info("Stuff happened")
 logger.warn("Too many requests", user: user_id)
 ```
-
-## Design approach
-
-GreenLog:
-
-- [avoids global state](doc/adr/0002-avoid-global-configuration.md)
-- explicitly [decouples log entry generation and handling](doc/adr/0003-decouple-generation-and-handling.md)
-- uses "[handler stacking](doc/adr/0004-use-stacked-handlers-to-solve-many-problems.md)" (similar to Rack middleware) to enable flexible log management
 
 ## Contributing
 
