@@ -15,6 +15,7 @@ GreenLog:
 - [avoids global state](doc/adr/0002-avoid-global-configuration.md)
 - explicitly [decouples log entry generation and handling](doc/adr/0003-decouple-generation-and-handling.md)
 - uses [an approach similar to Rack middleware](doc/adr/0004-use-stacked-handlers-to-solve-many-problems.md) for flexible log processing
+- uses [lock-free IO](doc/adr/0006-use-lock-free-io.md) for performance
 
 ## Installation
 
