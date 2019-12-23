@@ -40,14 +40,28 @@ module GreenLog
     def format_data(data)
       return nil if data.empty?
 
-      parts = data.map { |k, v| "#{k}=#{v.inspect}" }
-      "[" + parts.join(" ") + "]"
+      "[" + each_part_of(data).to_a.join(" ") + "]"
     end
 
     alias format_context format_data
 
     def format_message(message)
       message
+    end
+
+    private
+
+    def each_part_of(data, prefix = nil, &block)
+      return enum_for(:each_part_of, data, prefix) unless block_given?
+
+      data.each do |k, v|
+        label = [prefix, k].compact.join(".")
+        if v.is_a?(Hash)
+          each_part_of(v, label, &block)
+        else
+          yield "#{label}=#{v.inspect}"
+        end
+      end
     end
 
   end

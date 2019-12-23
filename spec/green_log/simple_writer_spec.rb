@@ -77,6 +77,16 @@ RSpec.describe GreenLog::SimpleWriter do
 
     end
 
+    context "with complex :data" do
+
+      log(data: { user: { name: "Boris", id: 666 } })
+
+      outputs "the data as properties", <<~OUT
+        I -- [user.name="Boris" user.id=666]
+      OUT
+
+    end
+
     context "with all components" do
 
       log(message: "Hello", context: log_context, data: log_data)
