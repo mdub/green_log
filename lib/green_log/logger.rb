@@ -11,7 +11,7 @@ module GreenLog
 
     def initialize(downstream, level: Severity::DEBUG)
       @downstream = downstream
-      @level = level
+      self.level = level
     end
 
     attr_reader :downstream

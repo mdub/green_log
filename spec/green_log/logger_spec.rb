@@ -27,6 +27,11 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  it "can be instantiated with a level" do
+    logger = described_class.new(log, level: "WARN")
+    expect(logger.level).to eq(GreenLog::Severity::WARN)
+  end
+
   describe "#log" do
 
     before do
