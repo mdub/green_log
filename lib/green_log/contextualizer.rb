@@ -2,7 +2,7 @@
 
 module GreenLog
 
-  # Represents a structured log entry.
+  # Log middleware that adds context.
   class Contextualizer
 
     def initialize(downstream, context)
