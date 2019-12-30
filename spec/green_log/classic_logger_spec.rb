@@ -45,6 +45,36 @@ RSpec.describe GreenLog::ClassicLogger do
 
     end
 
+    context "with neither message or block" do
+
+      it "raises an error" do
+        expect do
+          logger.add(Logger::WARN)
+        end.to raise_error(ArgumentError, "no message provided")
+      end
+
+    end
+
+    context "with nil message" do
+
+      it "raises an error" do
+        expect do
+          logger.add(Logger::WARN, nil)
+        end.to raise_error(ArgumentError, "no message provided")
+      end
+
+    end
+
+    context "with message AND block" do
+
+      it "raises an error" do
+        expect do
+          logger.add(Logger::WARN, "foo") { "bar" }
+        end.to raise_error(ArgumentError, "both message and block provided")
+      end
+
+    end
+
   end
 
   describe "#debug" do

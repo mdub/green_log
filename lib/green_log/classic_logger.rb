@@ -18,7 +18,11 @@ module GreenLog
 
     def add(severity, message = nil)
       severity = Integer(severity)
-      message ||= yield
+      raise ArgumentError, "both message and block provided" if !message.nil? && block_given?
+
+      message = yield if block_given?
+      raise ArgumentError, "no message provided" if message.nil?
+
       message = message.to_str
       entry = Entry.build(severity, message)
       downstream << entry
