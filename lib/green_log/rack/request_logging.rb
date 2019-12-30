@@ -29,7 +29,7 @@ module GreenLog
 
       Response = Struct.new(:status, :headers, :duration)
 
-      private
+      protected
 
       attr_reader :logger
 
