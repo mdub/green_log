@@ -20,7 +20,7 @@ module GreenLog
         format_part(entry, :context),
         "--",
         format_part(entry, :message),
-        format_part(entry, :data)
+        format_part(entry, :data),
       ].compact.join(" ") + "\n"
     end
 

@@ -15,7 +15,7 @@ module GreenLog
 
       def with(**args)
         args[:severity] = Severity.resolve(
-          args.fetch(:severity, Severity::INFO)
+          args.fetch(:severity, Severity::INFO),
         )
         args[:message] ||= nil
         args[:context] = args.fetch(:context, {}).to_loggable_value

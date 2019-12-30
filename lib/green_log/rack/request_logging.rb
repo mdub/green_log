@@ -23,7 +23,7 @@ module GreenLog
         duration = Time.now - started_at
         log(
           request: ::Rack::Request.new(env),
-          response: Response.new(status, headers, duration)
+          response: Response.new(status, headers, duration),
         )
       end
 
@@ -37,7 +37,7 @@ module GreenLog
         logger.info(
           "#{request.request_method} #{request.path} #{response.status}",
           request: request_details(request: request),
-          response: response_details(response: response)
+          response: response_details(response: response),
         )
       end
 
@@ -49,7 +49,7 @@ module GreenLog
           path: request.path,
           query: request.query_string,
           remote_user: request.env["REMOTE_USER"],
-          remote_addr: request.ip
+          remote_addr: request.ip,
         }
       end
 
@@ -57,7 +57,7 @@ module GreenLog
         {
           status: response.status.to_i,
           length: response.headers["Content-Length"].to_i,
-          duration: response.duration.round(3)
+          duration: response.duration.round(3),
         }
       end
 

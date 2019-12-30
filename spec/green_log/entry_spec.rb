@@ -299,8 +299,8 @@ RSpec.describe GreenLog::Entry do
         colour: "red",
         flavour: "strawberry",
         user: {
-          name: "Stan"
-        }
+          name: "Stan",
+        },
       }
     end
 
@@ -313,8 +313,8 @@ RSpec.describe GreenLog::Entry do
         flavour: "watermelon",
         direction: "north",
         user: {
-          id: 99
-        }
+          id: 99,
+        },
       }
     end
 
@@ -336,7 +336,7 @@ RSpec.describe GreenLog::Entry do
 
     it "merges deeply" do
       expect(result.context).to include(
-        user: { name: "Stan", id: 99 }
+        user: { name: "Stan", id: 99 },
       )
     end
 

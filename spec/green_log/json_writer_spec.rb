@@ -53,8 +53,8 @@ RSpec.describe GreenLog::JsonWriter do
     it "includes the message" do
       expect(output_data).to include(
         "context" => {
-          "thread" => "main"
-        }
+          "thread" => "main",
+        },
       )
     end
 
@@ -69,8 +69,8 @@ RSpec.describe GreenLog::JsonWriter do
     it "includes the data" do
       expect(output_data).to include(
         "data" => {
-          "duration" => 42
-        }
+          "duration" => 42,
+        },
       )
     end
 

@@ -21,7 +21,7 @@ module GreenLog
         "severity" => Severity.name(entry.severity).upcase,
         "message" => entry.message,
         "data" => entry.data,
-        "context" => entry.context
+        "context" => entry.context,
       }
       io << JSON.dump(record) + "\n"
     end

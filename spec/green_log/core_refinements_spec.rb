@@ -23,31 +23,31 @@ RSpec.describe GreenLog::CoreRefinements do
       it "merges deeply" do
         original = {
           author: {
-            name: "Jim"
-          }
+            name: "Jim",
+          },
         }
         new_data = {
           author: {
-            age: 42
-          }
+            age: 42,
+          },
         }
         expect(original.integrate(new_data)).to eq(
           author: {
             name: "Jim",
-            age: 42
-          }
+            age: 42,
+          },
         )
       end
 
       it "favours new data" do
         original = {
-          hockey: 1
+          hockey: 1,
         }
         new_data = {
-          hockey: 2
+          hockey: 2,
         }
         expect(original.integrate(new_data)).to eq(
-          hockey: 2
+          hockey: 2,
         )
       end
 
@@ -58,7 +58,7 @@ RSpec.describe GreenLog::CoreRefinements do
       let(:hash) do
         {
           "x" => 42,
-          "a" => { "b" => "c" }
+          "a" => { "b" => "c" },
         }
       end
 
@@ -68,8 +68,8 @@ RSpec.describe GreenLog::CoreRefinements do
           expect(hash.to_loggable_value).to eq(
             x: 42,
             a: {
-              b: "c"
-            }
+              b: "c",
+            },
           )
         end
 

@@ -26,7 +26,7 @@ RSpec.describe GreenLog::Rack::RequestLogging do
       "QUERY_STRING" => "",
       "REMOTE_ADDR" => ip,
       "REMOTE_USER" => user_name,
-      "REQUEST_METHOD" => request_method
+      "REQUEST_METHOD" => request_method,
     }
   end
 
@@ -63,8 +63,8 @@ RSpec.describe GreenLog::Rack::RequestLogging do
             scheme: request_scheme,
             host: request_host,
             path: request_path,
-            query: ""
-          )
+            query: "",
+          ),
         )
       end
 
@@ -73,8 +73,8 @@ RSpec.describe GreenLog::Rack::RequestLogging do
           response: hash_including(
             status: response_status,
             length: Integer,
-            duration: Float
-          )
+            duration: Float,
+          ),
         )
       end
 
@@ -98,16 +98,16 @@ RSpec.describe GreenLog::Rack::RequestLogging do
             method: request_method,
             scheme: request_scheme,
             host: request_host,
-            path: request_path
-          )
+            path: request_path,
+          ),
         )
       end
 
       it "assumes status 500" do
         expect(entries.last.data).to include(
           response: hash_including(
-            status: 500
-          )
+            status: 500,
+          ),
         )
       end
 
