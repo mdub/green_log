@@ -46,9 +46,9 @@ RSpec.describe GreenLog::Rack::RequestLogging do
 
   describe "#call" do
 
-    before { make_request }
-
     context "usually" do
+
+      before { make_request }
 
       it "includes basics details in log message" do
         expect(entries.last.message).to eq("#{request_method} #{request_path} #{response_status}")
@@ -74,6 +74,39 @@ RSpec.describe GreenLog::Rack::RequestLogging do
             status: response_status,
             length: Integer,
             duration: Float
+          )
+        )
+      end
+
+    end
+
+    context "when app raises an exception" do
+
+      let(:app) do
+        lambda do |_env|
+          raise "HELL"
+        end
+      end
+
+      before do
+        expect { make_request }.to raise_error
+      end
+
+      it "still logs request details" do
+        expect(entries.last.data).to include(
+          request: hash_including(
+            method: request_method,
+            scheme: request_scheme,
+            host: request_host,
+            path: request_path
+          )
+        )
+      end
+
+      it "assumes status 500" do
+        expect(entries.last.data).to include(
+          response: hash_including(
+            status: 500
           )
         )
       end
