@@ -11,23 +11,16 @@ module GreenLog
   # Represents a structured log entry.
   class Logger
 
-    def initialize(downstream, level: Severity::DEBUG)
+    def initialize(downstream)
       @downstream = downstream
-      self.level = level
     end
 
     attr_reader :downstream
-    attr_reader :level
-
-    def level=(severity)
-      @level = Severity.resolve(severity)
-    end
 
     include SeverityThresholdSupport
 
     def log(severity, *rest, &block)
       severity = Severity.resolve(severity)
-      return false if level > severity
       return false if severity < severity_threshold
 
       entry = Entry.build(severity, *rest, &block)
@@ -55,16 +48,26 @@ module GreenLog
       log(Severity::FATAL, *args, &block)
     end
 
+    # Add a middleware in front of the downstream handler.
+    # Return a new Logger with the expanded handler-stack.
+    def with_middleware
+      self.class.new(yield(downstream))
+    end
+
+    # Add a middleware that adds context.
+    # Return a new Logger with the expanded handler-stack.
     def with_context(context)
-      with_downstream Contextualizer.new(downstream, context)
+      with_middleware do |current_downstream|
+        Contextualizer.new(current_downstream, context)
+      end
     end
 
+    # Add a middleware that filters by severity.
+    # Return a new Logger with the expanded handler-stack.
     def with_severity_threshold(threshold)
-      with_downstream SeverityFilter.new(downstream, threshold: threshold)
-    end
-
-    def with_downstream(new_downstream)
-      self.class.new(new_downstream, level: level)
+      with_middleware do |downstream|
+        SeverityFilter.new(downstream, threshold: threshold)
+      end
     end
 
   end
