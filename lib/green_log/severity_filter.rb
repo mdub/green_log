@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "green_log/severity"
+
 module GreenLog
 
   # Log middleware that filters by severity.
@@ -7,14 +9,14 @@ module GreenLog
 
     def initialize(downstream, threshold:)
       @downstream = downstream
-      @threshold = threshold
+      @severity_threshold = GreenLog::Severity.resolve(threshold)
     end
 
     attr_reader :downstream
-    attr_reader :threshold
+    attr_reader :severity_threshold
 
     def <<(entry)
-      return if entry.severity < threshold
+      return if entry.severity < severity_threshold
 
       downstream << entry
     end

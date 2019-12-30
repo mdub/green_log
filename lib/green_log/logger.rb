@@ -3,6 +3,8 @@
 require "green_log/contextualizer"
 require "green_log/entry"
 require "green_log/severity"
+require "green_log/severity_filter"
+require "green_log/severity_threshold_support"
 
 module GreenLog
 
@@ -21,9 +23,12 @@ module GreenLog
       @level = Severity.resolve(severity)
     end
 
+    include SeverityThresholdSupport
+
     def log(severity, *rest, &block)
       severity = Severity.resolve(severity)
       return false if level > severity
+      return false if severity < severity_threshold
 
       entry = Entry.build(severity, *rest, &block)
       downstream << entry
@@ -52,6 +57,10 @@ module GreenLog
 
     def with_context(context)
       with_downstream Contextualizer.new(downstream, context)
+    end
+
+    def with_severity_threshold(threshold)
+      with_downstream SeverityFilter.new(downstream, threshold: threshold)
     end
 
     def with_downstream(new_downstream)

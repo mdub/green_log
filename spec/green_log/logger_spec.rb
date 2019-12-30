@@ -206,4 +206,64 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  context "#with_severity_threshold" do
+
+    let(:severity_threshold) { GreenLog::Severity::ERROR }
+
+    subject(:logger) do
+      described_class.new(log).with_severity_threshold(severity_threshold)
+    end
+
+    describe "#severity_threshold" do
+
+      it "returns the downstream threshold" do
+        expect(logger.severity_threshold).to eq(severity_threshold)
+      end
+
+    end
+
+    describe "#log" do
+
+      context "with severity at or above the threshold" do
+
+        it "logs events" do
+          logger.log(severity_threshold, "Stuff happened")
+          logger.log(severity_threshold + 1, "More stuff happened")
+          expect(log.size).to eq(2)
+        end
+
+        it "returns true" do
+          return_value = logger.log(severity_threshold, "Blah")
+          expect(return_value).to be(true)
+        end
+
+      end
+
+      context "with severity below the threshold" do
+
+        it "logs nothing" do
+          logger.log(severity_threshold - 1, "More stuff happened")
+          expect(log).to be_empty
+        end
+
+        it "does not evaluate blocks" do
+          block_evaluated = false
+          logger.log(severity_threshold - 1) do
+            block_evaluated = true
+            "Unused message"
+          end
+          expect(block_evaluated).to be(false)
+        end
+
+        it "returns false" do
+          return_value = logger.log(severity_threshold - 1, "Blah")
+          expect(return_value).to be(false)
+        end
+
+      end
+
+    end
+
+  end
+
 end
