@@ -33,24 +33,56 @@ RSpec.describe GreenLog::ClassicLogger do
 
     end
 
+    context "with a block" do
+
+      before do
+        logger.add(Logger::WARN) { message }
+      end
+
+      it "logs the yielded message" do
+        expect(log.last.message).to eq(message)
+      end
+
+    end
+
   end
 
   describe "#debug" do
 
-    before do
-      @return_value = logger.debug(message)
+    context "with a message" do
+
+      before do
+        @return_value = logger.debug(message)
+      end
+
+      it "logs the message" do
+        expect(log.last.message).to eq(message)
+      end
+
+      it "logs at DEBUG severity" do
+        expect(log.last.severity).to eq(GreenLog::Severity::DEBUG)
+      end
+
+      it "returns true" do
+        expect(@return_value).to be(true)
+      end
+
     end
 
-    it "logs the message" do
-      expect(log.last.message).to eq(message)
-    end
+    context "with a block" do
 
-    it "logs at DEBUG severity" do
-      expect(log.last.severity).to eq(GreenLog::Severity::DEBUG)
-    end
+      before do
+        @return_value = logger.debug { message }
+      end
 
-    it "returns true" do
-      expect(@return_value).to be(true)
+      it "logs the yielded message" do
+        expect(log.last.message).to eq(message)
+      end
+
+      it "returns true" do
+        expect(@return_value).to be(true)
+      end
+
     end
 
   end

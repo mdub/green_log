@@ -16,8 +16,9 @@ module GreenLog
 
     attr_reader :downstream
 
-    def add(severity, message)
+    def add(severity, message = nil)
       severity = Integer(severity)
+      message ||= yield
       message = message.to_str
       entry = Entry.build(severity, message)
       downstream << entry
@@ -25,24 +26,24 @@ module GreenLog
       true
     end
 
-    def debug(message)
-      add(Severity::DEBUG, message)
+    def debug(message = nil, &block)
+      add(Severity::DEBUG, message, &block)
     end
 
-    def info(message)
-      add(Severity::INFO, message)
+    def info(message = nil, &block)
+      add(Severity::INFO, message, &block)
     end
 
-    def warn(message)
-      add(Severity::WARN, message)
+    def warn(message = nil, &block)
+      add(Severity::WARN, message, &block)
     end
 
-    def error(message)
-      add(Severity::ERROR, message)
+    def error(message = nil, &block)
+      add(Severity::ERROR, message, &block)
     end
 
-    def fatal(message)
-      add(Severity::FATAL, message)
+    def fatal(message = nil, &block)
+      add(Severity::FATAL, message, &block)
     end
 
   end
