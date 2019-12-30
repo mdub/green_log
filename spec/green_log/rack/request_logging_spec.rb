@@ -89,7 +89,7 @@ RSpec.describe GreenLog::Rack::RequestLogging do
       end
 
       before do
-        expect { make_request }.to raise_error
+        expect { make_request }.to raise_error("HELL")
       end
 
       it "still logs request details" do
