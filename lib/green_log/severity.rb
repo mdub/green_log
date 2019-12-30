@@ -16,7 +16,7 @@ module GreenLog
     # An unhandleable error that results in a program crash.
     FATAL = 4
 
-    NAMES = %w[DEBUG INFO WARN ERROR FATAL].freeze
+    NAMES = %i[DEBUG INFO WARN ERROR FATAL].freeze
 
     class << self
 
@@ -38,7 +38,7 @@ module GreenLog
         when Integer
           arg
         when Symbol, String
-          NAMES.index(arg.to_s.upcase)
+          NAMES.index(arg.to_sym.upcase)
         end
       end
 
