@@ -3,6 +3,7 @@
 require "green_log/contextualizer"
 require "green_log/entry"
 require "green_log/severity"
+require "green_log/severity_threshold_support"
 
 module GreenLog
 
@@ -16,17 +17,14 @@ module GreenLog
 
     attr_reader :downstream
 
-    def add(severity, message = :unspecified)
+    include SeverityThresholdSupport
+
+    def add(severity, message = :unspecified, &block)
       severity = Integer(severity)
-      if block_given?
-        raise ArgumentError, "both message and block provided" unless message == :unspecified
+      return if severity < severity_threshold
 
-        message = yield
-      elsif message == :unspecified
-        raise ArgumentError, "no message provided"
-      end
+      entry = Entry.build(severity, resolve_message(message, &block))
 
-      entry = Entry.build(severity, normalise_message(message))
       downstream << entry
 
       true
@@ -53,6 +51,21 @@ module GreenLog
     end
 
     private
+
+    def resolve_message(message, &block)
+      normalise_message(extract_message(message, &block))
+    end
+
+    def extract_message(message, &block)
+      if block
+        raise ArgumentError, "both message and block provided" unless message == :unspecified
+
+        return block.call
+      end
+      raise ArgumentError, "no message provided" if message == :unspecified
+
+      message
+    end
 
     def normalise_message(message)
       return message if message.is_a?(Exception)

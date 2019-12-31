@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/classic_logger"
+require "green_log/severity_filter"
 require "logger"
 
 RSpec.describe GreenLog::ClassicLogger do
@@ -195,6 +196,53 @@ RSpec.describe GreenLog::ClassicLogger do
 
     it "logs at FATAL severity" do
       expect(log.last.severity).to eq(GreenLog::Severity::FATAL)
+    end
+
+  end
+
+  context "with a SeverityFilter" do
+
+    let(:severity_threshold) { GreenLog::Severity::INFO }
+
+    subject(:logger) do
+      described_class.new(
+        GreenLog::SeverityFilter.new(log, threshold: severity_threshold),
+      )
+    end
+
+    describe "#add" do
+
+      context "with severity at or above the threshold" do
+
+        before do
+          logger.info("Stuff happened")
+          logger.warn("Bad stuff happened")
+        end
+
+        it "logs events" do
+          expect(log.size).to eq(2)
+        end
+
+      end
+
+      context "with severity below the threshold" do
+
+        it "logs nothing" do
+          logger.debug("Detailed stuff happened")
+          expect(log).to be_empty
+        end
+
+        it "does not evaluate blocks" do
+          block_evaluated = false
+          logger.debug do
+            block_evaluated = true
+            "Unused message"
+          end
+          expect(block_evaluated).to be(false)
+        end
+
+      end
+
     end
 
   end
