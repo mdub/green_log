@@ -20,6 +20,11 @@ module GreenLog
 
     include SeverityThresholdSupport
 
+    # Generate a log entry.
+    # Arguments may include:
+    #   - a message string
+    #   - arbitrary data
+    #   - an exception
     def log(severity, *rest, &block)
       severity = Severity.resolve(severity)
       return false if severity < severity_threshold
@@ -29,24 +34,12 @@ module GreenLog
       true
     end
 
-    def debug(*args, &block)
-      log(Severity::DEBUG, *args, &block)
-    end
+    Severity::NAMES.each_with_index do |name, severity|
 
-    def info(*args, &block)
-      log(Severity::INFO, *args, &block)
-    end
+      define_method(name.downcase) do |*args, &block|
+        log(severity, *args, &block)
+      end
 
-    def warn(*args, &block)
-      log(Severity::WARN, *args, &block)
-    end
-
-    def error(*args, &block)
-      log(Severity::ERROR, *args, &block)
-    end
-
-    def fatal(*args, &block)
-      log(Severity::FATAL, *args, &block)
     end
 
     # Add a middleware in front of the downstream handler.
