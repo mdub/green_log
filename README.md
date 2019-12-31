@@ -36,12 +36,37 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-logger = GreenLog::Logger.new(
-  GreenLog::JsonWriter.new(STDOUT)
-)
+logger = GreenLog::Logger.build(dest: STDOUT)
 
 logger.info("Stuff happened")
 logger.warn("Too many requests", user: user_id)
+```
+
+### Alternate output destination or format
+
+By default GreenLog logs with a human-readable format; specify an alternate `format`
+class if you want a different serialisation format. It comes bundled with a JSON writer, e.g.
+
+```ruby
+logger = GreenLog::Logger.build(format: GreenLog::JsonWriter)
+```
+
+Logs go to STDOUT by default; specify `dest` to override, e.g.
+
+```ruby
+logger = GreenLog::Logger.build(dest: STDERR)
+```
+
+### Filtering by log severity
+
+By default all log entries will result in output. You can add a severity-threshold to avoid emitting debug-level log messages, e.g.
+
+```ruby
+logger = GreenLog::Logger.build(severity_threshold: :INFO)
+# OR
+logger = GreenLog::Logger.build.with_severity_threshold(:INFO)
+
+log.debug("Whatever") # ignored
 ```
 
 ## Contributing

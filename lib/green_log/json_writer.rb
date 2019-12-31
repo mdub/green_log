@@ -8,11 +8,11 @@ module GreenLog
   # A JSON-formated log.
   class JsonWriter
 
-    def initialize(io)
-      @io = io
+    def initialize(dest)
+      @dest = dest
     end
 
-    attr_reader :io
+    attr_reader :dest
 
     def <<(entry)
       raise ArgumentError, "GreenLog::Entry expected" unless entry.is_a?(GreenLog::Entry)
@@ -23,7 +23,7 @@ module GreenLog
         "data" => entry.data,
         "context" => entry.context,
       }
-      io << JSON.dump(record) + "\n"
+      dest << JSON.dump(record) + "\n"
     end
 
   end

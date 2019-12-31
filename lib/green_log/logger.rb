@@ -5,6 +5,7 @@ require "green_log/entry"
 require "green_log/severity"
 require "green_log/severity_filter"
 require "green_log/severity_threshold_support"
+require "green_log/simple_writer"
 
 module GreenLog
 
@@ -68,6 +69,17 @@ module GreenLog
       with_middleware do |downstream|
         SeverityFilter.new(downstream, threshold: threshold)
       end
+    end
+
+    class << self
+
+      # Build a Logger.
+      def build(dest: $stdout, format: SimpleWriter, severity_threshold: nil)
+        downstream = format.new(dest)
+        downstream = SeverityFilter.new(downstream, threshold: severity_threshold) if severity_threshold
+        new(downstream)
+      end
+
     end
 
   end

@@ -8,14 +8,16 @@ module GreenLog
   # A simple log formatter, aimed at humans.
   class SimpleWriter
 
-    def initialize(io)
-      @io = io
+    def initialize(dest)
+      @dest = dest
     end
+
+    attr_reader :dest
 
     def <<(entry)
       raise ArgumentError, "GreenLog::Entry expected" unless entry.is_a?(GreenLog::Entry)
 
-      @io << [
+      dest << [
         format_part(entry, :severity),
         format_part(entry, :context),
         "--",

@@ -215,4 +215,59 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  describe ".build" do
+
+    context "with no arguments" do
+
+      let(:logger) { GreenLog::Logger.build }
+
+      it "creates a Logger" do
+        expect(logger).to be_a(GreenLog::Logger)
+      end
+
+      it "writes Simple format" do
+        expect(logger.downstream).to be_a(GreenLog::SimpleWriter)
+      end
+
+      it "writes to $stdout" do
+        expect(logger.downstream.dest).to be($stdout)
+      end
+
+    end
+
+    context "with a :dest" do
+
+      let(:buffer) { StringIO.new }
+      let(:logger) { GreenLog::Logger.build(dest: buffer) }
+
+      it "writes to the specified dest" do
+        expect(logger.downstream.dest).to be(buffer)
+      end
+
+    end
+
+    context "with a :format" do
+
+      let(:logger) { GreenLog::Logger.build(format: GreenLog::JsonWriter) }
+
+      it "uses the specified writer class" do
+        expect(logger.downstream).to be_a(GreenLog::JsonWriter)
+      end
+
+    end
+
+    context "with a :severity_threshold" do
+
+      let(:logger) { GreenLog::Logger.build(severity_threshold: GreenLog::Severity::WARN) }
+
+      it "adds a SeverityFilter" do
+        expect(logger.downstream).to be_a(GreenLog::SeverityFilter)
+        expect(logger.downstream.severity_threshold).to eq(GreenLog::Severity::WARN)
+        expect(logger.downstream.downstream).to be_a(GreenLog::SimpleWriter)
+      end
+
+    end
+
+  end
+
 end
