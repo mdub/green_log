@@ -55,22 +55,56 @@ RSpec.describe GreenLog::ClassicLogger do
 
     end
 
-    context "with nil message" do
-
-      it "raises an error" do
-        expect do
-          logger.add(Logger::WARN, nil)
-        end.to raise_error(ArgumentError, "no message provided")
-      end
-
-    end
-
     context "with message AND block" do
 
       it "raises an error" do
         expect do
           logger.add(Logger::WARN, "foo") { "bar" }
         end.to raise_error(ArgumentError, "both message and block provided")
+      end
+
+    end
+
+    context "with nil message" do
+
+      before do
+        logger.add(Logger::WARN, nil)
+      end
+
+      it "logs 'nil'" do
+        expect(log.last.message).to eq(nil.inspect)
+      end
+
+    end
+
+    context "with an exception" do
+
+      let(:exception) { StandardError.new("Oh god") }
+
+      before do
+        logger.add(Logger::WARN, exception)
+      end
+
+      it "logs the exception" do
+        expect(log.last.exception).to eq(exception)
+      end
+
+      it "leave the message blank" do
+        expect(log.last.message).to be(nil)
+      end
+
+    end
+
+    context "with complex data" do
+
+      let(:data) { [1, 2, 3] }
+
+      before do
+        logger.add(Logger::WARN, data)
+      end
+
+      it "calls inspect to create a message" do
+        expect(log.last.message).to eq(data.inspect)
       end
 
     end
