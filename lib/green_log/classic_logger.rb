@@ -30,24 +30,16 @@ module GreenLog
       true
     end
 
-    def debug(message = :unspecified, &block)
-      add(Severity::DEBUG, message, &block)
-    end
+    Severity::NAMES.each_with_index do |name, severity|
 
-    def info(message = :unspecified, &block)
-      add(Severity::INFO, message, &block)
-    end
+      define_method(name.downcase) do |message = :unspecified, &block|
+        add(severity, message, &block)
+      end
 
-    def warn(message = :unspecified, &block)
-      add(Severity::WARN, message, &block)
-    end
+      define_method("#{name.downcase}?") do
+        severity >= severity_threshold
+      end
 
-    def error(message = :unspecified, &block)
-      add(Severity::ERROR, message, &block)
-    end
-
-    def fatal(message = :unspecified, &block)
-      add(Severity::FATAL, message, &block)
     end
 
     private

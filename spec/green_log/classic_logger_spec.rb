@@ -202,7 +202,7 @@ RSpec.describe GreenLog::ClassicLogger do
 
   context "with a SeverityFilter" do
 
-    let(:severity_threshold) { GreenLog::Severity::INFO }
+    let(:severity_threshold) { GreenLog::Severity::WARN }
 
     subject(:logger) do
       described_class.new(
@@ -215,8 +215,8 @@ RSpec.describe GreenLog::ClassicLogger do
       context "with severity at or above the threshold" do
 
         before do
-          logger.info("Stuff happened")
-          logger.warn("Bad stuff happened")
+          logger.add(severity_threshold, "Stuff happened")
+          logger.add(severity_threshold + 1, "Bad stuff happened")
         end
 
         it "logs events" do
@@ -228,17 +228,40 @@ RSpec.describe GreenLog::ClassicLogger do
       context "with severity below the threshold" do
 
         it "logs nothing" do
-          logger.debug("Detailed stuff happened")
+          logger.add(severity_threshold - 1, "Detailed stuff happened")
           expect(log).to be_empty
         end
 
         it "does not evaluate blocks" do
           block_evaluated = false
-          logger.debug do
+          logger.add(severity_threshold - 1) do
             block_evaluated = true
             "Unused message"
           end
           expect(block_evaluated).to be(false)
+        end
+
+      end
+
+    end
+
+    describe "each predicate method" do
+
+      context "at or above the threshold" do
+
+        it "returns true" do
+          expect(logger.warn?).to be(true)
+          expect(logger.error?).to be(true)
+          expect(logger.fatal?).to be(true)
+        end
+
+      end
+
+      context "below the threshold" do
+
+        it "returns false" do
+          expect(logger.debug?).to be(false)
+          expect(logger.info?).to be(false)
         end
 
       end
