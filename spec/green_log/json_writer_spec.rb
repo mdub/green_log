@@ -76,4 +76,37 @@ RSpec.describe GreenLog::JsonWriter do
 
   end
 
+  context "with an exception" do
+
+    let(:exception) do
+
+      raise ArgumentError, "wrong!"
+    rescue StandardError => e
+      e
+
+    end
+
+    before do
+      log(exception: exception)
+    end
+
+    it "outputs exception class and message" do
+      expect(output_data).to include(
+        "exception" => hash_including(
+          "class" => "ArgumentError",
+          "message" => "wrong!",
+        ),
+      )
+    end
+
+    it "outputs exception backtrace" do
+      expect(output_data).to include(
+        "exception" => hash_including(
+          "backtrace" => kind_of(Array),
+        ),
+      )
+    end
+
+  end
+
 end
