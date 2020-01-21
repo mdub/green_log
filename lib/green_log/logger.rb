@@ -9,7 +9,7 @@ require "green_log/simple_writer"
 
 module GreenLog
 
-  # Represents a structured log entry.
+  # Log entry generator.
   class Logger
 
     def initialize(downstream)
