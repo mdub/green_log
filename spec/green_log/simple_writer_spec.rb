@@ -23,13 +23,6 @@ RSpec.describe GreenLog::SimpleWriter do
     end
   end
 
-  def self.logging(desc, **args, &block)
-    context(desc) do
-      log(**args)
-      class_eval(&block)
-    end
-  end
-
   def self.outputs(desc, expectation)
     it "outputs #{desc}" do
       expect(output).to match(expectation)
@@ -94,6 +87,33 @@ RSpec.describe GreenLog::SimpleWriter do
       outputs "everything", <<~OUT
         I [colour="yellow" flavour="banana"] -- Hello [width=3 height=5]
       OUT
+
+    end
+
+    context "with an exception" do
+
+      let(:exception) do
+
+        raise ArgumentError, "wrong!"
+      rescue StandardError => e
+        e
+
+      end
+
+      before do
+        log(exception: exception)
+      end
+
+      it "outputs exception class and message" do
+        expect(output).to match <<~OUT
+          I --
+            ! ArgumentError: wrong!
+        OUT
+      end
+
+      it "outputs exception backtrace" do
+        expect(output).to match(/(^    \S+:\d+:in .+$)+/)
+      end
 
     end
 

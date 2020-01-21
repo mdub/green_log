@@ -17,13 +17,22 @@ module GreenLog
     def <<(entry)
       raise ArgumentError, "GreenLog::Entry expected" unless entry.is_a?(GreenLog::Entry)
 
-      dest << [
+      output = [
         format_part(entry, :severity),
         format_part(entry, :context),
         "--",
         format_part(entry, :message),
         format_part(entry, :data),
       ].compact.join(" ") + "\n"
+
+      unless (e = entry.exception).nil?
+        output << "  ! #{e.class.name}: #{e.message}\n"
+        e.backtrace.each do |line|
+          output << "    #{line}\n"
+        end
+      end
+
+      dest << output
     end
 
     protected
