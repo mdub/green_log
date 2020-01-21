@@ -271,3 +271,25 @@ RSpec.describe GreenLog::ClassicLogger do
   end
 
 end
+
+RSpec.describe GreenLog::Logger do
+
+  let(:log) { [] }
+
+  subject(:logger) { described_class.new(log) }
+
+  describe "#to_classic_logger" do
+
+    let(:result) { logger.to_classic_logger }
+
+    it "returns a ClassicLogger" do
+      expect(result).to be_a(GreenLog::ClassicLogger)
+    end
+
+    it "uses the same downstream" do
+      expect(result.downstream).to be(logger.downstream)
+    end
+
+  end
+
+end

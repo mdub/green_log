@@ -68,4 +68,12 @@ module GreenLog
 
   end
 
+  class Logger
+
+    def to_classic_logger
+      GreenLog::ClassicLogger.new(downstream)
+    end
+
+  end
+
 end
