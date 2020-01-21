@@ -68,6 +68,7 @@ module GreenLog
 
   end
 
+  # :rubocop:disable: Style/Documentation
   class Logger
 
     def to_classic_logger

@@ -25,12 +25,7 @@ module GreenLog
         format_part(entry, :data),
       ].compact.join(" ") + "\n"
 
-      unless (e = entry.exception).nil?
-        output << "  ! #{e.class.name}: #{e.message}\n"
-        e.backtrace.each do |line|
-          output << "    #{line}\n"
-        end
-      end
+      output << format_exception(entry.exception)
 
       dest << output
     end
@@ -58,6 +53,16 @@ module GreenLog
 
     def format_message(message)
       message
+    end
+
+    def format_exception(exception)
+      return "" if exception.nil?
+
+      result = "  ! #{exception.class.name}: #{exception.message}\n"
+      exception.backtrace.each do |line|
+        result += "    #{line}\n"
+      end
+      result
     end
 
     private
