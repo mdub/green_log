@@ -2,6 +2,7 @@
 
 require "green_log/entry"
 require "green_log/severity"
+require "json"
 
 module GreenLog
 
