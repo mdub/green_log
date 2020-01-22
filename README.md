@@ -13,6 +13,7 @@ GreenLog is a logging library for Ruby applications.  It:
 GreenLog:
 
 - [avoids global state](doc/adr/0002-avoid-global-configuration.md)
+- avoids mutable objects
 - explicitly [decouples log entry generation and handling](doc/adr/0003-decouple-generation-and-handling.md)
 - uses [an approach similar to Rack middleware](doc/adr/0004-use-stacked-handlers-to-solve-many-problems.md) for flexible log processing
 - uses [lock-free IO](doc/adr/0006-use-lock-free-io.md) for performance
@@ -29,27 +30,98 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install green_log
-
 ## Usage
 
+### tl;dr
+
 ```ruby
-logger = GreenLog::Logger.build(dest: STDOUT)
+require 'green_log'
+
+logger = GreenLog::Logger.build
 
 logger.info("Stuff happened")
-logger.warn("Too many requests", user: user_id)
+# outputs: I -- Stuff happened
 ```
 
-### Alternate output destination or format
+### Basic logging
+
+GreenLog implements all the expected logging shortcuts:
+
+```ruby
+logger.debug("Nitty gritty detail")
+# outputs: D -- Nitty gritty detail
+logger.info("Huh, interesting.")
+# outputs: I -- Huh, interesting.
+logger.warn("Careful now.")
+# outputs: W -- Careful now.
+logger.error("Oh, that's really not good!")
+# outputs: E -- Oh, that's really not good!
+logger.fatal("Byeeee ...")
+# outputs: F -- Byeeee ...
+```
+
+### Adding context
+
+`Logger#with_context` adds detail about the _source_ of log messages.
+
+```ruby
+logger = GreenLog::Logger.build.with_context(pid: Process.pid, thread: Thread.current.object_id)
+logger.info("Hello")
+# outputs: I [pid=13545 thread=70260187418160] -- Hello
+```
+
+It can be chained to inject additional context:
+
+```ruby
+logger.with_context(request: 16273).info("Handled")
+# outputs: I [pid=13545 thread=70260187418160 request=16273] -- Handled
+```
+
+### Including data and exceptions
+
+A Hash of data can be included along with the log message:
+
+```ruby
+logger = GreenLog::Logger.build
+logger.info("New widget", id: widget.id)
+# outputs: I -- New widget [id=12345]
+```
+
+And/or, you can attach an exception:
+
+```ruby
+begin
+  Integer("abc")
+rescue => e
+  logger.error("parse error", e)
+end
+# outputs: E -- parse error
+#            ! ArgumentError: invalid value for Integer(): "abc"
+#              (irb):50:in `Integer'
+#              (irb):50:in `irb_binding'
+#              ...
+```
+
+### Alternate output format
 
 By default GreenLog logs with a human-readable format; specify an alternate `format`
 class if you want a different serialisation format. It comes bundled with a JSON writer, e.g.
 
 ```ruby
 logger = GreenLog::Logger.build(format: GreenLog::JsonWriter)
+# OR
+logger = GreenLog::Logger.build(format: "json")
+
+logger.info("Structured!", foo: "bar")
 ```
+
+outputs
+
+```json
+{"severity":"INFO","message":"Structured!","data":{"foo":"bar"},"context":{}}
+```
+
+### Alternate output destination
 
 Logs go to STDOUT by default; specify `dest` to override, e.g.
 
@@ -67,6 +139,39 @@ logger = GreenLog::Logger.build(severity_threshold: :INFO)
 logger = GreenLog::Logger.build.with_severity_threshold(:INFO)
 
 log.debug("Whatever") # ignored
+```
+
+### Block form
+
+Rather than passing arguments, you can provide a block to generate log messages:
+
+```ruby
+logger.info do
+  "generated message"
+end
+# outputs: I -- generated message
+```
+
+The block may be ignored, if a severity-threshold is in effect:
+
+```ruby
+logger = GreenLog::Logger.build(severity_threshold: :INFO)
+
+log.debug do
+  # not evaluated
+end
+```
+
+### Compatibility with stdlib Logger
+
+GreenLog includes a backward-compatibile adapter for code written to use Ruby's built-in [`Logger`](https://ruby-doc.org/stdlib-2.4.0/libdoc/logger/rdoc/Logger.html):
+
+```ruby
+require 'green_log/classic_logger'
+
+legacy_logger = logger.to_classic_logger
+legacy_logger.warn("Old skool")
+# outputs: W -- Old skool
 ```
 
 ## Contributing
