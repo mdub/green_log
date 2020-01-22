@@ -68,9 +68,17 @@ module GreenLog
 
       # Build a Logger.
       def build(dest: $stdout, format: SimpleWriter, severity_threshold: nil)
+        format = resolve_format(format)
         downstream = format.new(dest)
         downstream = SeverityFilter.new(downstream, threshold: severity_threshold) if severity_threshold
         new(downstream)
+      end
+
+      def resolve_format(format)
+        return format if format.is_a?(Class)
+
+        format = format.to_s if format.is_a?(Symbol)
+        GreenLog.const_get("#{format.capitalize}Writer")
       end
 
     end

@@ -248,10 +248,24 @@ RSpec.describe GreenLog::Logger do
 
     context "with a :format" do
 
-      let(:logger) { GreenLog::Logger.build(format: GreenLog::JsonWriter) }
+      context "specified as a class" do
 
-      it "uses the specified writer class" do
-        expect(logger.downstream).to be_a(GreenLog::JsonWriter)
+        let(:logger) { GreenLog::Logger.build(format: GreenLog::JsonWriter) }
+
+        it "uses the specified writer class" do
+          expect(logger.downstream).to be_a(GreenLog::JsonWriter)
+        end
+
+      end
+
+      context "specified as a string" do
+
+        let(:logger) { GreenLog::Logger.build(format: "json") }
+
+        it "derives the writer class" do
+          expect(logger.downstream).to be_a(GreenLog::JsonWriter)
+        end
+
       end
 
     end
