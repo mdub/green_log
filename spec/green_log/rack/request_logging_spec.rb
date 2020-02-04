@@ -17,6 +17,8 @@ RSpec.describe GreenLog::Rack::RequestLogging do
   let(:request_method) { "GET" }
   let(:request_path) { "/whoami" }
   let(:request_scheme) { "https" }
+  let(:request_body) { "" }
+  let(:request_input_stream) { StringIO.new(request_body) }
 
   let(:request_env) do
     {
@@ -27,6 +29,7 @@ RSpec.describe GreenLog::Rack::RequestLogging do
       "REMOTE_ADDR" => ip,
       "REMOTE_USER" => user_name,
       "REQUEST_METHOD" => request_method,
+      "rack.input" => request_input_stream,
     }
   end
 
@@ -65,6 +68,12 @@ RSpec.describe GreenLog::Rack::RequestLogging do
             path: request_path,
             query: "",
           ),
+        )
+      end
+
+      it "excludes request body" do
+        expect(entries.last.data).not_to include(
+          request: hash_including(:body),
         )
       end
 
@@ -109,6 +118,33 @@ RSpec.describe GreenLog::Rack::RequestLogging do
             status: 500,
           ),
         )
+      end
+
+    end
+
+    context "when log_request_bodies is enabled" do
+
+      subject(:middleware) { described_class.new(app, logger, log_request_bodies: true) }
+
+      let(:request_method) { "POST" }
+      let(:request_body) { "foobar" }
+      let(:bytes_read) { 3 }
+
+      before do
+        request_input_stream.read(bytes_read)
+        make_request
+      end
+
+      it "includes request body" do
+        expect(entries.last.data).to include(
+          request: hash_including(
+            body: request_body,
+          ),
+        )
+      end
+
+      it "leaves body pointer at original position" do
+        expect(request_input_stream.pos).to eq(bytes_read)
       end
 
     end

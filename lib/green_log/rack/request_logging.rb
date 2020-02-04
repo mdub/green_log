@@ -9,9 +9,10 @@ module GreenLog
     # Structured request logging.
     class RequestLogging
 
-      def initialize(app, logger)
+      def initialize(app, logger, log_request_bodies: false)
         @app = app
         @logger = logger
+        @log_request_bodies = log_request_bodies
       end
 
       def call(env)
@@ -32,6 +33,7 @@ module GreenLog
       protected
 
       attr_reader :logger
+      attr_reader :log_request_bodies
 
       def log(request:, response:)
         logger.info(
@@ -50,7 +52,17 @@ module GreenLog
           query: request.query_string,
           remote_user: request.env["REMOTE_USER"],
           remote_addr: request.ip,
-        }
+        }.tap do |details|
+          details[:body] = request_body(request) if log_request_bodies
+        end
+      end
+
+      def request_body(request)
+        original_position = request.body.pos
+        request.body.rewind
+        request.body.read
+      ensure
+        request.body.seek(original_position)
       end
 
       def response_details(response:)
