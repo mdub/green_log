@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "green_log/contextualizer"
+require "green_log/dynamic_contextualizer"
 require "green_log/entry"
 require "green_log/severity"
 require "green_log/severity_filter"
@@ -50,9 +51,12 @@ module GreenLog
 
     # Add a middleware that adds context.
     # Return a new Logger with the expanded handler-stack.
-    def with_context(context)
+    def with_context(static_context = nil, &context_generator)
       with_middleware do |current_downstream|
-        Contextualizer.new(current_downstream, context)
+        downstream = current_downstream
+        downstream = Contextualizer.new(downstream, static_context) unless static_context.nil?
+        downstream = DynamicContextualizer.new(downstream, &context_generator) unless context_generator.nil?
+        downstream
       end
     end
 

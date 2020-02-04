@@ -141,16 +141,43 @@ RSpec.describe GreenLog::Logger do
   describe "#with_context" do
 
     let(:message) { "Stuff happened" }
-    let(:context) { { thread: "main" } }
 
-    let!(:logger_with_context) do
-      logger.with_context(context)
+    context "with a context Hash" do
+
+      let(:context) { { thread: "main" } }
+
+      let(:logger_with_context) do
+        logger.with_context(context)
+      end
+
+      it "adds context to log entries" do
+        logger_with_context.info(message)
+        expect(log.last.context).to eq(context)
+        expect(log.last.message).to eq(message)
+      end
+
     end
 
-    it "adds context to log entries" do
-      logger_with_context.info(message)
-      expect(log.last.context).to eq(context)
-      expect(log.last.message).to eq(message)
+    context "with a block" do
+
+      let(:logger_with_context) do
+        counter = 0
+        logger.with_context do
+          # context block attaches a sequential "counter"
+          counter += 1
+          {
+            counter: counter
+          }
+        end
+      end
+
+      it "adds context to log entries" do
+        logger_with_context.info(message)
+        expect(log.last.context.fetch(:counter)).to eq(1)
+        logger_with_context.warn(message)
+        expect(log.last.context.fetch(:counter)).to eq(2)
+      end
+
     end
 
   end
