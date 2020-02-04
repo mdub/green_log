@@ -16,7 +16,7 @@ RSpec.describe GreenLog::Contextualizer do
   let(:extra_context) { { pid: 123, thread: "main" } }
 
   subject(:contextualizer) do
-    described_class.new(log, extra_context)
+    described_class.new(log) { extra_context }
   end
 
   before do
