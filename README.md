@@ -77,6 +77,17 @@ logger.with_context(request: 16273).info("Handled")
 # outputs: I [pid=13545 thread=70260187418160 request=16273] -- Handled
 ```
 
+Context can also be calculated dynamically, using a block:
+
+```ruby
+logger = GreenLog::Logger.build.with_context do
+  {
+    request_id: Thread.current[:request_id]
+  }
+end
+# outputs: I [pid=13545 thread=70260187418160 request=16273] -- Handled
+```
+
 ### Including data and exceptions
 
 A Hash of data can be included along with the log message:
