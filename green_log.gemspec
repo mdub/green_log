@@ -15,8 +15,8 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files         = Dir.chdir(File.expand_path(__dir__)) do
-    Dir.glob("{bin,lib}/**/*") + %w[
-      README.md Gemfile Gemfile.lock Rakefile LICENSE.txt json-sequence.gemspec
+    Dir.glob("{bin,doc,examples,lib}/**/*") + %w[
+      README.md green_log.gemspec
     ]
   end
 
