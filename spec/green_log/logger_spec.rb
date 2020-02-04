@@ -166,7 +166,7 @@ RSpec.describe GreenLog::Logger do
           # context block attaches a sequential "counter"
           counter += 1
           {
-            counter: counter
+            counter: counter,
           }
         end
       end
