@@ -185,6 +185,18 @@ legacy_logger.warn("Old skool")
 # outputs: W -- Old skool
 ```
 
+### Rack request-logging
+
+GreenLog bundles a Rack middleware - an alternative to [`Rack::CommonLogger`](https://www.rubydoc.info/gems/rack/Rack/CommonLogger) - that generates structured HTTP access logs:
+
+```ruby
+require "green_log"
+require "green_log/rack/request_logging"
+
+logger = GreenLog::Logger.build(format: "json")
+use GreenLog::Rack::RequestLogging, logger
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/greensync/green_log.
