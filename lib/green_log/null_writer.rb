@@ -9,11 +9,9 @@ module GreenLog
   # A road to nowhere.
   class NullWriter
 
-    def initialize
-    end
+    def initialize; end
 
-    def <<(_entry)
-    end
+    def <<(_entry); end
 
     def severity_threshold
       Severity::FATAL
