@@ -140,6 +140,14 @@ Logs go to STDOUT by default; specify `dest` to override, e.g.
 logger = GreenLog::Logger.build(dest: STDERR)
 ```
 
+### Null logger
+
+`GreenLog::Logger.null` returns a "null object" Logger, which routes log entries to `/dev/null`.
+
+```ruby
+logger = GreenLog::Logger.null
+```
+
 ### Filtering by log severity
 
 By default all log entries will result in output. You can add a severity-threshold to avoid emitting debug-level log messages, e.g.

@@ -242,6 +242,16 @@ RSpec.describe GreenLog::Logger do
 
   end
 
+  describe ".null" do
+
+    let(:logger) { GreenLog::Logger.null }
+
+    it "uses a NullWriter" do
+      expect(logger.downstream).to be_a(GreenLog::NullWriter)
+    end
+
+  end
+
   describe ".build" do
 
     context "with no arguments" do

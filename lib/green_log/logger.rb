@@ -5,6 +5,7 @@ require "green_log/entry"
 require "green_log/severity"
 require "green_log/severity_filter"
 require "green_log/severity_threshold_support"
+require "green_log/null_writer"
 require "green_log/simple_writer"
 
 module GreenLog
@@ -82,6 +83,11 @@ module GreenLog
 
         format = format.to_s if format.is_a?(Symbol)
         GreenLog.const_get("#{format.capitalize}Writer")
+      end
+
+      # Return a null-object Logger.
+      def null
+        new(NullWriter.new)
       end
 
     end
