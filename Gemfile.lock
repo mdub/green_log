@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    green_log (0.1.0)
+    green_log (0.2.0)
       values (~> 1.8)
 
 GEM
@@ -58,4 +58,4 @@ DEPENDENCIES
   rubocop (~> 0.77)
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
