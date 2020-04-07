@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.name          = "green_log"
   spec.version       = GreenLog::VERSION
   spec.authors       = ["Mike Williams"]
-  spec.email         = ["mike.williams@greensync.com.au"]
+  spec.email         = ["mdub@dogbiscuit.org"]
 
   spec.summary       = "Structured logging for cloud-native systems."
-  spec.homepage      = "https://github.com/greensync/green_log"
+  spec.homepage      = "https://github.com/mdub/green_log"
   spec.license       = "MIT"
 
   spec.files         = Dir.chdir(File.expand_path(__dir__)) do

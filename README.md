@@ -1,6 +1,6 @@
 # GreenLog
 
-![](https://github.com/greensync/green_log/workflows/CI/badge.svg)
+![](https://github.com/mdub/green_log/workflows/CI/badge.svg)
 
 GreenLog is a logging library for Ruby applications.  It:
 
@@ -207,7 +207,7 @@ use GreenLog::Rack::RequestLogging, logger
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/greensync/green_log.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mdub/green_log.
 
 ## License
 
