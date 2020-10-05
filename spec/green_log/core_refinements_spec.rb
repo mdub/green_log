@@ -95,4 +95,20 @@ RSpec.describe GreenLog::CoreRefinements do
 
   end
 
+  describe Time do
+
+    describe "#to_loggable_value" do
+
+      it "returns the time in ISO8601 format with the time zone preserved" do
+        original = Time.new(2020, 1, 1, 12, 0o0, 0o0, "+10:00")
+        result = original.to_loggable_value
+        expect(result).to eq("2020-01-01T12:00:00+10:00")
+        expect(result).to be_frozen
+        expect(original).to_not be_frozen
+      end
+
+    end
+
+  end
+
 end
