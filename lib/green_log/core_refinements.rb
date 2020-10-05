@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "time"
+
 module GreenLog
 
   # Refine
@@ -64,6 +66,14 @@ module GreenLog
 
       def to_loggable_value
         self
+      end
+
+    end
+
+    refine ::Time do
+
+      def to_loggable_value
+        iso8601.freeze
       end
 
     end
