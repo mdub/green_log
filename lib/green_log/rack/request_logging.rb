@@ -64,11 +64,15 @@ module GreenLog
       end
 
       def request_body(request)
-        original_position = request.body.pos
-        request.body.rewind
-        request.body.read
-      ensure
-        request.body.seek(original_position)
+        return "" if request.body.size.zero?
+
+        begin
+          original_position = request.body.pos
+          request.body.rewind
+          request.body.read
+        ensure
+          request.body.seek(original_position)
+        end
       end
 
       def response_details(response)
