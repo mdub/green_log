@@ -16,6 +16,26 @@ RSpec.describe GreenLog::CoreRefinements do
         expect(hash.to_loggable_value).to be_frozen
       end
 
+      context "with String keys" do
+
+        let(:hash) do
+          {
+            "x" => 42,
+            "a" => { "b" => "c" },
+          }
+        end
+
+        it "symbolizes the keys" do
+          expect(hash.to_loggable_value).to eq(
+            x: 42,
+            a: {
+              b: "c",
+            },
+          )
+        end
+
+      end
+
     end
 
     describe "#integrate" do
@@ -49,30 +69,6 @@ RSpec.describe GreenLog::CoreRefinements do
         expect(original.integrate(new_data)).to eq(
           hockey: 2,
         )
-      end
-
-    end
-
-    context "with String keys" do
-
-      let(:hash) do
-        {
-          "x" => 42,
-          "a" => { "b" => "c" },
-        }
-      end
-
-      describe "#to_loggable_value" do
-
-        it "symbolizes the keys" do
-          expect(hash.to_loggable_value).to eq(
-            x: 42,
-            a: {
-              b: "c",
-            },
-          )
-        end
-
       end
 
     end
