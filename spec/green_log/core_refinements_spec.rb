@@ -75,6 +75,31 @@ RSpec.describe GreenLog::CoreRefinements do
 
   end
 
+  describe Array do
+
+    describe "#to_loggable_value" do
+
+      let(:array) do
+        [{ "host" => "foo.example.com", pid: 123 }, [4], 7, "Blah"]
+      end
+
+      it "returns a frozen Array" do
+        result = array.to_loggable_value
+        expect(result).to be_frozen
+        expect(result).to eq(
+          [
+            { host: "foo.example.com", pid: 123 },
+            [4],
+            7,
+            "Blah",
+          ],
+        )
+      end
+
+    end
+
+  end
+
   describe String do
 
     describe "#to_loggable_value" do

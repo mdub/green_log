@@ -28,6 +28,14 @@ module GreenLog
 
     end
 
+    refine ::Array do
+
+      def to_loggable_value
+        map(&:to_loggable_value).freeze
+      end
+
+    end
+
     refine ::Numeric do
 
       def to_loggable_value
