@@ -1,7 +1,7 @@
 # GreenLog
 
 [![Gem Version](https://badge.fury.io/rb/green_log.svg)](http://badge.fury.io/rb/green_log)
-[![Build Status](https://github.com/mdub/green_log/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/mdub/green_log/actions/workflows/ci.yaml)
+[![Build Status](https://github.com/mdub/green_log/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mdub/green_log/actions/workflows/ci.yml)
 
 GreenLog is a logging library for Ruby applications.  It:
 
