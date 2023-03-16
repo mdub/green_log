@@ -2,14 +2,27 @@
 
 require "green_log/core_refinements"
 require "green_log/severity"
-require "values"
 
 module GreenLog
 
   # Represents a structured log entry.
-  class Entry < Value.new(:severity, :message, :context, :data, :exception)
+  class Entry
 
     using CoreRefinements
+
+    def initialize(severity:, message:, context:, data:, exception:)
+      @severity = severity
+      @message = message
+      @context = context
+      @data = data
+      @exception = exception
+    end
+
+    attr_reader :severity
+    attr_reader :message
+    attr_reader :context
+    attr_reader :data
+    attr_reader :exception
 
     class << self
 
@@ -21,7 +34,7 @@ module GreenLog
         args[:context] = args.fetch(:context, {}).to_loggable_value
         args[:data] = args.fetch(:data, {}).to_loggable_value
         args[:exception] ||= nil
-        super(**args)
+        new(**args)
       end
 
       def build(severity, *args, &block)
@@ -31,7 +44,13 @@ module GreenLog
     end
 
     def in_context(extra_context)
-      with(context: extra_context.integrate(context).to_loggable_value)
+      Entry.new(
+        severity: severity,
+        message: message,
+        context: extra_context.integrate(context).to_loggable_value,
+        data: data,
+        exception: exception,
+      )
     end
 
     # A builder for entries.

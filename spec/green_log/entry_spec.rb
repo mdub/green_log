@@ -10,7 +10,7 @@ RSpec.describe GreenLog::Entry do
     context "by default" do
 
       subject(:entry) do
-        GreenLog::Entry.with({})
+        GreenLog::Entry.with
       end
 
       describe "#message" do

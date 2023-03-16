@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     green_log (0.2.0)
-      values (~> 1.8)
 
 GEM
   remote: https://rubygems.org/
@@ -48,7 +47,6 @@ GEM
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
     unicode-display_width (1.8.0)
-    values (1.8.0)
 
 PLATFORMS
   ruby
