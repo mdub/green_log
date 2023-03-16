@@ -126,25 +126,51 @@ RSpec.describe GreenLog::Rack::RequestLogging do
 
       subject(:middleware) { described_class.new(app, logger, log_request_bodies: true) }
 
-      let(:request_method) { "POST" }
-      let(:request_body) { "foobar" }
-      let(:bytes_read) { 3 }
+      context "when the request body is not empty" do
 
-      before do
-        request_input_stream.read(bytes_read)
-        make_request
+        let(:request_method) { "POST" }
+        let(:request_body) { "foobar" }
+        let(:bytes_read) { 3 }
+
+        before do
+          request_input_stream.read(bytes_read)
+          make_request
+        end
+
+        it "includes request body" do
+          expect(entries.last.data).to include(
+            request: hash_including(
+              body: request_body,
+            ),
+          )
+        end
+
+        it "leaves body pointer at original position" do
+          expect(request_input_stream.pos).to eq(bytes_read)
+        end
+
       end
 
-      it "includes request body" do
-        expect(entries.last.data).to include(
-          request: hash_including(
-            body: request_body,
-          ),
-        )
-      end
+      context "when the request body is empty (e.g. Puma::NullIO, which doesn't have #pos or #seek)" do
 
-      it "leaves body pointer at original position" do
-        expect(request_input_stream.pos).to eq(bytes_read)
+        let(:request_method) { "GET" }
+        let(:request_body) { "" }
+        let(:bytes_read) { 0 }
+
+        let(:request_input_stream) { double("empty request body", size: 0) }
+
+        before do
+          make_request
+        end
+
+        it "includes an empty request body" do
+          expect(entries.last.data).to include(
+            request: hash_including(
+              body: request_body,
+            ),
+          )
+        end
+
       end
 
     end
