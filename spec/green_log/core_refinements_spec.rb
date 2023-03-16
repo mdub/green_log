@@ -16,6 +16,26 @@ RSpec.describe GreenLog::CoreRefinements do
         expect(hash.to_loggable_value).to be_frozen
       end
 
+      context "with String keys" do
+
+        let(:hash) do
+          {
+            "x" => 42,
+            "a" => { "b" => "c" },
+          }
+        end
+
+        it "symbolizes the keys" do
+          expect(hash.to_loggable_value).to eq(
+            x: 42,
+            a: {
+              b: "c",
+            },
+          )
+        end
+
+      end
+
     end
 
     describe "#integrate" do
@@ -53,26 +73,27 @@ RSpec.describe GreenLog::CoreRefinements do
 
     end
 
-    context "with String keys" do
+  end
 
-      let(:hash) do
-        {
-          "x" => 42,
-          "a" => { "b" => "c" },
-        }
+  describe Array do
+
+    describe "#to_loggable_value" do
+
+      let(:array) do
+        [{ "host" => "foo.example.com", pid: 123 }, [4], 7, "Blah"]
       end
 
-      describe "#to_loggable_value" do
-
-        it "symbolizes the keys" do
-          expect(hash.to_loggable_value).to eq(
-            x: 42,
-            a: {
-              b: "c",
-            },
-          )
-        end
-
+      it "returns a frozen Array" do
+        result = array.to_loggable_value
+        expect(result).to be_frozen
+        expect(result).to eq(
+          [
+            { host: "foo.example.com", pid: 123 },
+            [4],
+            7,
+            "Blah",
+          ],
+        )
       end
 
     end
